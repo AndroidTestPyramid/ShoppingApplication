@@ -47,15 +47,17 @@ public class ShoppingItemsListingActivity extends Activity {
     };
   }
 
-  private void renderProducts(GridView gridView, ArrayList<Product> products) {
+  private void renderProducts(GridView gridView, final ArrayList<Product> products) {
     gridView.setAdapter(new ShoppingItemsListAdapter(this, products));
+
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Product product = (Product) adapterView.getAdapter().getItem(position);
-                Intent intent = new Intent(getApplicationContext(), ProductDetailsActivity.class);
-                intent.putExtra(PRODUCT_KEY, product);
-                startActivity(intent);
+
+        Intent intent = new Intent(getApplicationContext(), ProductDetailsActivity.class);
+        intent.putParcelableArrayListExtra(PRODUCTS_KEY, products);
+        intent.putExtra(CURRENT_PRODUCT_KEY, position);
+        startActivity(intent);
       }
     });
   }
