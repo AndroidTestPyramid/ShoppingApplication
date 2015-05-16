@@ -17,9 +17,7 @@ import bootcamp.android.adapters.ShoppingItemsListAdapter;
 import bootcamp.android.models.Product;
 import bootcamp.android.repositories.ProductRepository;
 
-import static bootcamp.android.constants.Constants.DESCRIPTION_KEY;
-import static bootcamp.android.constants.Constants.IMAGE_URL_KEY;
-import static bootcamp.android.constants.Constants.TITLE_KEY;
+import static bootcamp.android.constants.Constants.*;
 
 public class ShoppingItemsListingActivity extends Activity {
 
@@ -55,11 +53,9 @@ public class ShoppingItemsListingActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Product product = (Product) adapterView.getAdapter().getItem(position);
-        Intent intent = new Intent(getApplicationContext(), ProductDetailsActivity.class);
-        intent.putExtra(TITLE_KEY, product.getTitle());
-        intent.putExtra(DESCRIPTION_KEY, product.getDescription());
-        intent.putExtra(IMAGE_URL_KEY, product.getImageUrl());
-        startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), ProductDetailsActivity.class);
+                intent.putExtra(PRODUCT_KEY, product);
+                startActivity(intent);
       }
     });
   }
