@@ -1,0 +1,13 @@
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="droidcon.cart.view.ProductsFragment"
+    android:id="@+id/grid_view"
+    android:numColumns="2"
+    android:horizontalSpacing="20dp"
+    android:verticalSpacing="20dp"
+    android:gravity="center"
+    android:background="#CCCCCC"
+    android:stretchMode="columnWidth">
+</GridView>

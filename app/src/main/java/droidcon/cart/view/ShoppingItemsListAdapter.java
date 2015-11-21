@@ -1,4 +1,4 @@
-package bootcamp.android.adapters;
+package droidcon.cart.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,8 +14,8 @@ import java.util.List;
 
 import androidplugins.Callback;
 import androidplugins.imagefetcher.ImageFetcher;
-import bootcamp.android.R;
-import bootcamp.android.models.Product;
+import droidcon.cart.R;
+import droidcon.cart.model.Product;
 
 public class ShoppingItemsListAdapter extends BaseAdapter {
   private final Context context;
@@ -65,5 +65,4 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
       }
     };
   }
-
 }

@@ -1,4 +1,4 @@
-package bootcamp.android.models;
+package droidcon.cart.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

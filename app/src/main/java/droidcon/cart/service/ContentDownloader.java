@@ -1,4 +1,4 @@
-package bootcamp.android.services;
+package droidcon.cart.service;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

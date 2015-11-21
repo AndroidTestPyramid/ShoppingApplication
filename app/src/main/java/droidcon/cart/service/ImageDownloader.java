@@ -1,4 +1,4 @@
-package bootcamp.android.services;
+package droidcon.cart.service;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

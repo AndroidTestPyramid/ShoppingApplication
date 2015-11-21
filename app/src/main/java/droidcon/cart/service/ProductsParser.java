@@ -1,6 +1,6 @@
-package bootcamp.android.services;
+package droidcon.cart.service;
 
-import bootcamp.android.models.Product;
+import droidcon.cart.model.Product;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
