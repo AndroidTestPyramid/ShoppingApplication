@@ -3,22 +3,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="wrap_content"
-              android:layout_height="150dp"
+              android:layout_height="170dp"
               android:background="#ffffff"
               android:padding="5dp"
               android:gravity="center">
 
-  <TextView
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/title"
-      android:layout_gravity="center|top"
-      android:textColor="#000000"
-      />
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"/>
 
-  <ImageView
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/imageView"
-      android:scaleType="fitXY"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:paddingTop="2dp"
+        android:layout_gravity="center|top"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:textColor="#000000"/>
 </LinearLayout>
