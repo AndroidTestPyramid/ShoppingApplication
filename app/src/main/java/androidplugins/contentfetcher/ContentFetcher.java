@@ -63,6 +63,7 @@ public class ContentFetcher extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String resultString) {
 		super.onPostExecute(resultString);
+		Log.d(this.getClass().getName(), "Content Data: " + resultString);
 		callback.execute(resultString);
 	}
 

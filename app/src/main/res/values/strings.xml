@@ -4,4 +4,15 @@
   <string name="electronics">ELECTRONICS</string>
   <string name="accessories">ACCESSORIES</string>
   <string name="cart">Cart</string>
+  <string name="prompt_email">Email</string>
+  <string name="prompt_password">Password</string>
+  <string name="action_sign_in">Sign in</string>
+  <string name="error_invalid_email">This email address is invalid</string>
+  <string name="error_invalid_password">This password is too short</string>
+  <string name="error_incorrect_email">This password is incorrect</string>
+  <string name="error_field_required">This field is required</string>
+  <string name="logging_in">Logging in...</string>
+  <string name="technical_difficulty">There is some technical difficulties</string>
+  <string name="invalid_credential">Invalid Credential</string>
+  <string name="login_header">Please enter registered username and password to sign in.</string>
 </resources>

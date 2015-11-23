@@ -45,7 +45,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
-      convertView = LayoutInflater.from(context).inflate(R.layout.product, parent, false);
+      convertView = LayoutInflater.from(context).inflate(R.layout.product_layout, parent, false);
     }
     ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
     TextView titleTextView = (TextView) convertView.findViewById(R.id.title);

@@ -31,7 +31,7 @@ public class ProductsFragment extends Fragment {
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.products, container, false);
+    View view = inflater.inflate(R.layout.products_layout, container, false);
     progressDialog = ProgressDialog.show(getActivity(), "", "Loading...", true, true);
     gridView = (GridView) view.findViewById(R.id.grid_view);
     return view;

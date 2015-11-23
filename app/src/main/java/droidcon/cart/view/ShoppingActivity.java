@@ -26,7 +26,7 @@ public class ShoppingActivity extends AppCompatActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.shopping);
+    setContentView(R.layout.shopping_activity);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
