@@ -5,8 +5,4 @@
         android:icon="@drawable/shape_notification"
         app:showAsAction="always"
         android:title="@string/cart"/>
-    <item
-        android:id="@+id/action_settings"
-        app:showAsAction="never"
-        android:title="Settings"/>
 </menu>
