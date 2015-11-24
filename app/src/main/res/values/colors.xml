@@ -7,4 +7,5 @@
     <color name="yellow">#ff9900</color>
     <color name="grey">#22000000</color>
     <color name="red">#CC0001</color>
+    <color name="grey_white">#dddddd</color>
 </resources>

@@ -22,5 +22,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:scrollHorizontally="true"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        android:textSize="13sp"/>
 </LinearLayout>
