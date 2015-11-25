@@ -1,6 +1,6 @@
-package droidcon.shopping.service;
+package droidcon.cart.service;
 
-import droidcon.shopping.model.Product;
+import droidcon.cart.model.Product;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

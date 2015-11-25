@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import droidcon.cart.R;
-import droidcon.shopping.view.ShoppingActivity;
+import droidcon.cart.view.ShoppingActivity;
 
 public class LoginActivity extends Activity {
 

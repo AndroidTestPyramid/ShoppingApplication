@@ -1,4 +1,4 @@
-package droidcon.shopping.view;
+package droidcon.cart.view;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidplugins.Callback;
 import androidplugins.imagefetcher.ImageFetcher;
 import droidcon.cart.R;
-import droidcon.shopping.model.Product;
+import droidcon.cart.model.Product;
 
-import static droidcon.shopping.Constants.PRODUCT_KEY;
+import static droidcon.cart.Constants.PRODUCT_KEY;
 
 public class ProductDetailsActivity extends Activity {
 

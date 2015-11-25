@@ -1,9 +1,10 @@
-package droidcon.shopping.service;
+package droidcon.cart.service;
 
 import java.util.ArrayList;
 
 import androidplugins.Callback;
-import droidcon.shopping.model.Product;
+import droidcon.cart.model.Product;
+import droidcon.cart.service.ProductsParser;
 
 public class ProductServiceClient {
 
