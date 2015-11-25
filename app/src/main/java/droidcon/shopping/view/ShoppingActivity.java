@@ -1,4 +1,4 @@
-package droidcon.cart.view;
+package droidcon.shopping.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

@@ -17,13 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.ShoppingActivity" >
+        <activity android:name="droidcon.shopping.view.ShoppingActivity" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.ProductDetailsActivity"
+            android:name="droidcon.shopping.view.ProductDetailsActivity"
             android:label="@string/title_activity_product_details"
             android:theme="@style/AppTheme">
         </activity>

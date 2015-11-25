@@ -1,4 +1,4 @@
-package droidcon.cart.model;
+package droidcon.shopping.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
