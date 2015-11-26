@@ -11,7 +11,7 @@ import androidplugins.Callback;
 import androidplugins.imagefetcher.ImageFetcher;
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
-import droidcon.cart.model.Product;
+import droidcon.shopping.model.Product;
 
 import static droidcon.cart.Constants.PRODUCT_KEY;
 

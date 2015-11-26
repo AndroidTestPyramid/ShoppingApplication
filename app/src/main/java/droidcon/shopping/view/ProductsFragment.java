@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import androidplugins.Callback;
 import droidcon.cart.R;
+import droidcon.cart.view.ProductDetailsActivity;
 import droidcon.shopping.model.Product;
 import droidcon.shopping.service.ProductServiceClient;
 
