@@ -6,10 +6,12 @@ import android.os.Parcelable;
 public class Product  implements Parcelable {
 
   private final String imageUrl;
+  private final int productId;
   private String title;
   private String description;
 
-  public Product(String title, String description, String imageUrl) {
+  public Product(int productId, String title, String description, String imageUrl) {
+    this.productId = productId;
     this.title = title;
     this.description = description;
     this.imageUrl = imageUrl;
@@ -27,6 +29,10 @@ public class Product  implements Parcelable {
     return imageUrl;
   }
 
+  public int getProductId() {
+    return productId;
+  }
+
   @Override
   public String toString() {
     return title;
@@ -39,12 +45,14 @@ public class Product  implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(productId);
     dest.writeString(title);
     dest.writeString(description);
     dest.writeString(imageUrl);
   }
 
   private Product(Parcel in){
+    this.productId = in.readInt();
     this.title = in.readString();
     this.description = in.readString();
     this.imageUrl = in.readString();
@@ -59,5 +67,4 @@ public class Product  implements Parcelable {
       return new Product[size];
     }
   };
-
 }

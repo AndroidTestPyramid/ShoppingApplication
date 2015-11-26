@@ -16,4 +16,6 @@
   <string name="invalid_credential">Invalid Credential</string>
   <string name="login_header">Please enter registered username and password to sign in.</string>
   <string name="title_activity_product_details">ProductDetailsActivity</string>
+  <string name="add_to_wishlist">Add to Wishlist</string>
+  <string name="buy">Buy</string>
 </resources>

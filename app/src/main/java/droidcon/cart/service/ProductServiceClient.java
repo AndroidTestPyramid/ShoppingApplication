@@ -9,7 +9,7 @@ import droidcon.cart.service.ProductsParser;
 public class ProductServiceClient {
 
   public void getProducts(Callback<ArrayList<Product>> productsCallback) {
-    new androidplugins.contentfetcher.ContentFetcher(responseCallback(productsCallback), "GET").execute("http://xplorationstudio.com/sample_images/products_json.json");
+    new androidplugins.contentfetcher.ContentFetcher(responseCallback(productsCallback), "GET").execute("http://xplorationstudio.com/sample_images/products.json");
   }
 
   private Callback<String> responseCallback(final Callback<ArrayList<Product>> productsCallback) {

@@ -16,11 +16,11 @@ import android.view.View;
 import android.widget.Button;
 
 import droidcon.cart.R;
+import droidcon.cart.model.ProductInCart;
 
 public class ShoppingActivity extends AppCompatActivity {
 
   private ViewPager viewPager;
-  private Button cart;
   private int numOfItems = 0;
 
   @Override
@@ -56,6 +56,12 @@ public class ShoppingActivity extends AppCompatActivity {
   }
 
   @Override
+  protected void onResume() {
+    super.onResume();
+    setNumOfItems();
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.cart_menu, menu);
@@ -63,13 +69,14 @@ public class ShoppingActivity extends AppCompatActivity {
     final MenuItem item = menu.findItem(R.id.cart);
     MenuItemCompat.setActionView(item, R.layout.cart_update_count);
     View count = item.getActionView();
-    cart = (Button) count.findViewById(R.id.num_of_items);
+    Button cart = (Button) count.findViewById(R.id.num_of_items);
     cart.setText(String.valueOf(numOfItems));
     return super.onCreateOptionsMenu(menu);
   }
 
-  private void setNumOfItems(int count){
-    numOfItems = count;
+  private void setNumOfItems(){
+    final long productInCarts = ProductInCart.count(ProductInCart.class, null, null);
+    numOfItems = (int)productInCarts;
     invalidateOptionsMenu();
   }
 
