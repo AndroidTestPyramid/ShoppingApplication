@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 
@@ -34,6 +35,7 @@ public class ProductDetailsActivity extends Activity {
   }
 
   public void addToCart(View view) {
+    Toast.makeText(this, R.string.addedToCart, Toast.LENGTH_SHORT).show();
     final ProductInCart productInCart = new ProductInCart(product.getProductId());
     productInCart.save();
   }
