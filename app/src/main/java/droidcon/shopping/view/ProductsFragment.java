@@ -1,4 +1,4 @@
-package droidcon.cart.view;
+package droidcon.shopping.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 import androidplugins.Callback;
 import droidcon.cart.R;
-import droidcon.cart.model.Product;
-import droidcon.cart.service.ProductServiceClient;
+import droidcon.shopping.model.Product;
+import droidcon.shopping.service.ProductServiceClient;
 
 import static droidcon.cart.Constants.PRODUCT_KEY;
 

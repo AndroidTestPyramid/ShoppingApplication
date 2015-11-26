@@ -1,4 +1,4 @@
-package droidcon.cart.view;
+package droidcon.shopping.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,7 +15,7 @@ import java.util.List;
 import androidplugins.Callback;
 import androidplugins.imagefetcher.ImageFetcher;
 import droidcon.cart.R;
-import droidcon.cart.model.Product;
+import droidcon.shopping.model.Product;
 
 public class ShoppingItemsListAdapter extends BaseAdapter {
   private final Context context;
