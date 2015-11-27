@@ -44,7 +44,7 @@ public class APIClient extends AsyncTask<String, Void, Object> {
         result = responseCallback.parse(content);
       }
     } catch (IOException httpResponseError) {
-      Log.e("HTTP Response", httpResponseError.toString());
+      Log.e(this.getClass().getName(), "HTTP Error: " + httpResponseError.toString());
       return httpResponseError;
     }
     return result;
