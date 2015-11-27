@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -54,7 +55,17 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     renderProductTitle(convertView, product);
     renderProductImage(convertView, product);
     renderProductCost(convertView, product);
+    renderUpcomingDeal(convertView, product);
     return convertView;
+  }
+
+  private void renderUpcomingDeal(View convertView, Product product) {
+    if(product.getUpcomingDeal() != 0){
+      final LinearLayout upcomingDealView = (LinearLayout)convertView.findViewById(R.id.upcoming_deal);
+      upcomingDealView.setVisibility(View.VISIBLE);
+      TextView percentage = (TextView) convertView.findViewById(R.id.percentage);
+      percentage.setText(String.format("%d%s", product.getUpcomingDeal(), context.getString(R.string.percentage_sign)));
+    }
   }
 
   private void renderProductTitle(View convertView, Product product) {

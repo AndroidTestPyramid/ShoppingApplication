@@ -3,25 +3,27 @@ package droidcon.shopping.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
-public class Product  implements Parcelable {
+public class Product implements Parcelable {
 
   @SerializedName("image_url")
   private final String imageUrl;
   @SerializedName("product_id")
   private final int productId;
   private final int price;
-  private String title;
-  private String description;
+  private final String title;
+  private final String description;
+  @SerializedName("upcoming_deal")
+  private final int upcomingDeal;
 
-  public Product(int productId, String title, String description, String imageUrl, int price) {
+  public Product(int productId, String title, String description, String imageUrl, int price, int upcomingDeal) {
     this.productId = productId;
     this.title = title;
     this.description = description;
     this.imageUrl = imageUrl;
     this.price = price;
+    this.upcomingDeal = upcomingDeal;
   }
 
   public String getDescription() {
@@ -44,6 +46,10 @@ public class Product  implements Parcelable {
     return price;
   }
 
+  public int getUpcomingDeal() {
+    return upcomingDeal;
+  }
+
   @Override
   public String toString() {
     return title;
@@ -61,6 +67,7 @@ public class Product  implements Parcelable {
     dest.writeString(description);
     dest.writeString(imageUrl);
     dest.writeInt(price);
+    dest.writeInt(upcomingDeal);
   }
 
   private Product(Parcel in){
@@ -69,6 +76,7 @@ public class Product  implements Parcelable {
     this.description = in.readString();
     this.imageUrl = in.readString();
     this.price = in.readInt();
+    this.upcomingDeal = in.readInt();
   }
 
   public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
