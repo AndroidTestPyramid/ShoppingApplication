@@ -53,6 +53,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     Product product = products.get(position);
     renderProductTitle(convertView, product);
     renderProductImage(convertView, product);
+    renderProductCost(convertView, product);
     return convertView;
   }
 
@@ -64,6 +65,11 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
   private void renderProductImage(View convertView, Product product) {
     ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
     fetchBitmap(imageView, product.getImageUrl());
+  }
+
+  private void renderProductCost(View convertView, Product product) {
+    TextView costTextView = (TextView) convertView.findViewById(R.id.cost);
+    costTextView.setText(String.format("%s%d", context.getString(R.string.cost), product.getPrice()));
   }
 
   private void fetchBitmap(ImageView imageView, String imageUrl) {

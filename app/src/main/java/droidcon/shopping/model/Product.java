@@ -12,14 +12,16 @@ public class Product  implements Parcelable {
   private final String imageUrl;
   @SerializedName("product_id")
   private final int productId;
+  private final int price;
   private String title;
   private String description;
 
-  public Product(int productId, String title, String description, String imageUrl) {
+  public Product(int productId, String title, String description, String imageUrl, int price) {
     this.productId = productId;
     this.title = title;
     this.description = description;
     this.imageUrl = imageUrl;
+    this.price = price;
   }
 
   public String getDescription() {
@@ -38,6 +40,10 @@ public class Product  implements Parcelable {
     return productId;
   }
 
+  public int getPrice() {
+    return price;
+  }
+
   @Override
   public String toString() {
     return title;
@@ -54,6 +60,7 @@ public class Product  implements Parcelable {
     dest.writeString(title);
     dest.writeString(description);
     dest.writeString(imageUrl);
+    dest.writeInt(price);
   }
 
   private Product(Parcel in){
@@ -61,6 +68,7 @@ public class Product  implements Parcelable {
     this.title = in.readString();
     this.description = in.readString();
     this.imageUrl = in.readString();
+    this.price = in.readInt();
   }
 
   public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
