@@ -70,7 +70,7 @@ public class LoginActivity extends Activity {
   private ResponseCallback<String> getCallback() {
     return new ResponseCallback<String>() {
       @Override
-      public String parse(InputStream response) {
+      public String deserialize(InputStream response) {
         return ResponseParserFactory.jsonParser().parse(response);
       }
 

@@ -58,7 +58,7 @@ public class ProductsFragment extends Fragment {
   private ResponseCallback<ArrayList<Product>> productsCallback() {
     return new ResponseCallback<ArrayList<Product>>() {
       @Override
-      public ArrayList<Product> parse(InputStream response) {
+      public ArrayList<Product> deserialize(InputStream response) {
         Gson gson = new GsonBuilder().create();
         Type listType = new TypeToken<ArrayList<Product>>() {}.getType();
         ArrayList<Product> products = gson.fromJson(ResponseParserFactory.jsonParser().parse(response), listType);

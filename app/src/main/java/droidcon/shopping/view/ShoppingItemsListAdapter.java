@@ -74,7 +74,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
   private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
     return new ResponseCallback<Bitmap>() {
       @Override
-      public Bitmap parse(InputStream response) {
+      public Bitmap deserialize(InputStream response) {
         return ResponseParserFactory.bitmapParser().parse(response);
       }
 

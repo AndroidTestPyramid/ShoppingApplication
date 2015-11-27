@@ -41,7 +41,7 @@ public class APIClient extends AsyncTask<String, Void, Object> {
       if (statusCode >= 200 && statusCode <= 210) {
         HttpEntity httpEntity = httpResponse.getEntity();
         InputStream content = httpEntity.getContent();
-        result = responseCallback.parse(content);
+        result = responseCallback.deserialize(content);
       }
     } catch (IOException httpResponseError) {
       Log.e(this.getClass().getName(), "HTTP Error: " + httpResponseError.toString());
