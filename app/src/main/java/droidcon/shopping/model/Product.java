@@ -3,9 +3,14 @@ package droidcon.shopping.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+
 public class Product  implements Parcelable {
 
+  @SerializedName("image_url")
   private final String imageUrl;
+  @SerializedName("product_id")
   private final int productId;
   private String title;
   private String description;

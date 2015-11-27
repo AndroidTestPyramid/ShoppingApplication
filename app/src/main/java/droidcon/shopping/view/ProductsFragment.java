@@ -13,7 +13,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import droidcon.cart.R;
@@ -22,7 +27,6 @@ import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
-import droidcon.shopping.service.ProductsParser;
 
 import static droidcon.shopping.Constants.PRODUCT_KEY;
 
@@ -55,7 +59,10 @@ public class ProductsFragment extends Fragment {
     return new ResponseCallback<ArrayList<Product>>() {
       @Override
       public ArrayList<Product> parse(InputStream response) {
-        return new ProductsParser().parseProducts(ResponseParserFactory.jsonParser().parse(response));
+        Gson gson = new GsonBuilder().create();
+        Type listType = new TypeToken<ArrayList<Product>>() {}.getType();
+        ArrayList<Product> products = gson.fromJson(ResponseParserFactory.jsonParser().parse(response), listType);
+        return products;
       }
 
       @Override
