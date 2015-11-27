@@ -35,16 +35,20 @@ public class ProductsFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    new APIClient(RequestType.GET, productsCallback()).execute(PRODUCTS_URL);
+    fetchProducts();
   }
 
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.products_layout, container, false);
-    progressDialog = ProgressDialog.show(getActivity(), "", "Loading...", true, true);
+    progressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.loading), true, false);
     gridView = (GridView) view.findViewById(R.id.grid_view);
     return view;
+  }
+
+  private void fetchProducts() {
+    new APIClient(RequestType.GET, productsCallback()).execute(PRODUCTS_URL);
   }
 
   private ResponseCallback<ArrayList<Product>> productsCallback() {

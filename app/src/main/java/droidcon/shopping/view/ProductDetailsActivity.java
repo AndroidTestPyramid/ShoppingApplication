@@ -28,13 +28,29 @@ public class ProductDetailsActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.product_details);
     product = getIntent().getExtras().getParcelable(PRODUCT_KEY);
-    TextView imageTitle = (TextView) findViewById(R.id.product_title);
-    imageTitle.setText(product.getTitle());
-    ImageView imageView = (ImageView) findViewById(R.id.product_image);
-    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
-    apiClient.execute(product.getImageUrl());
+    renderProductTitle();
+    renderProductDescription();
+    renderProductImage((ImageView) findViewById(R.id.product_image));
+  }
+
+  public void addToCart(View view) {
+    final ProductInCart productInCart = new ProductInCart(product.getProductId());
+    productInCart.save();
+  }
+
+  private void renderProductDescription() {
     TextView issueDescription = (TextView) findViewById(R.id.product_description);
     issueDescription.setText(product.getDescription());
+  }
+
+  private void renderProductTitle() {
+    TextView imageTitle = (TextView) findViewById(R.id.product_title);
+    imageTitle.setText(product.getTitle());
+  }
+
+  private void renderProductImage(ImageView imageView) {
+    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
+    apiClient.execute(product.getImageUrl());
   }
 
   private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
@@ -56,8 +72,4 @@ public class ProductDetailsActivity extends Activity {
     };
   }
 
-  public void addToCart(View view) {
-    final ProductInCart productInCart = new ProductInCart(product.getProductId());
-    productInCart.save();
-  }
 }

@@ -9,18 +9,17 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
 
+import droidcon.cart.R;
+import droidcon.service.APIClient;
 import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
-import droidcon.service.APIClient;
 import droidcon.service.ResponseParserFactory;
-import droidcon.cart.R;
 import droidcon.shopping.view.ShoppingActivity;
 
 public class LoginActivity extends Activity {
@@ -35,15 +34,13 @@ public class LoginActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.login_activity);
 
-    final Button signInButtonView = (Button) findViewById(R.id.sign_in_button);
-
     emailView = (EditText) findViewById(R.id.email);
     passwordView = (EditText) findViewById(R.id.password);
     passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override
       public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
         if (id == R.id.login || id == EditorInfo.IME_NULL) {
-          attemptLogin(signInButtonView);
+          login(findViewById(R.id.sign_in_button));
           return true;
         }
         return false;
@@ -51,7 +48,7 @@ public class LoginActivity extends Activity {
     });
   }
 
-  public void attemptLogin(View signInButtonView) {
+  public void login(View signInButtonView) {
     String email = emailView.getText().toString();
     String password = passwordView.getText().toString();
 
@@ -60,9 +57,13 @@ public class LoginActivity extends Activity {
       boolean passwordValidation = validatePassword(password);
       if (passwordValidation) {
         showProgress();
-        new APIClient(RequestType.GET, getCallback()).execute(String.format(LOGIN_URL, email, password));
+        checkLogin(email, password);
       }
     }
+  }
+
+  private void checkLogin(String email, String password) {
+    new APIClient(RequestType.GET, getCallback()).execute(String.format(LOGIN_URL, email, password));
   }
 
   @NonNull

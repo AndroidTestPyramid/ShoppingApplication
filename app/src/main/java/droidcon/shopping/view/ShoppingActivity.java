@@ -21,7 +21,7 @@ import droidcon.cart.model.ProductInCart;
 public class ShoppingActivity extends AppCompatActivity {
 
   private ViewPager viewPager;
-  private int numOfItems = 0;
+  private int numOfProductsInTheCart = 0;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class ShoppingActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    setNumOfItems();
+    setNumOfProductsInCart();
   }
 
   @Override
@@ -69,14 +69,14 @@ public class ShoppingActivity extends AppCompatActivity {
     final MenuItem item = menu.findItem(R.id.cart);
     MenuItemCompat.setActionView(item, R.layout.cart_update_count);
     View count = item.getActionView();
-    Button cart = (Button) count.findViewById(R.id.num_of_items);
-    cart.setText(String.valueOf(numOfItems));
+    Button cart = (Button) count.findViewById(R.id.num_of_products);
+    cart.setText(String.valueOf(numOfProductsInTheCart));
     return super.onCreateOptionsMenu(menu);
   }
 
-  private void setNumOfItems(){
+  private void setNumOfProductsInCart(){
     final long productInCarts = ProductInCart.count(ProductInCart.class, null, null);
-    numOfItems = (int)productInCarts;
+    numOfProductsInTheCart = (int)productInCarts;
     invalidateOptionsMenu();
   }
 

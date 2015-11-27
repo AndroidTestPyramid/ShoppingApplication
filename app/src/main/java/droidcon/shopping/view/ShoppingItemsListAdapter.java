@@ -50,14 +50,25 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     if (convertView == null) {
       convertView = LayoutInflater.from(context).inflate(R.layout.product_layout, parent, false);
     }
-    ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
-    TextView titleTextView = (TextView) convertView.findViewById(R.id.title);
     Product product = products.get(position);
-    titleTextView.setText(product.getTitle());
-    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
-    apiClient.execute(product.getImageUrl());
-
+    renderProductTitle(convertView, product);
+    renderProductImage(convertView, product);
     return convertView;
+  }
+
+  private void renderProductTitle(View convertView, Product product) {
+    TextView titleTextView = (TextView) convertView.findViewById(R.id.title);
+    titleTextView.setText(product.getTitle());
+  }
+
+  private void renderProductImage(View convertView, Product product) {
+    ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
+    fetchBitmap(imageView, product.getImageUrl());
+  }
+
+  private void fetchBitmap(ImageView imageView, String imageUrl) {
+    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
+    apiClient.execute(imageUrl);
   }
 
   private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
