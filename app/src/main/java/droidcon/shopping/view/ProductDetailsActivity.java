@@ -1,4 +1,4 @@
-package droidcon.cart.view;
+package droidcon.shopping.view;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -7,13 +7,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidplugins.Callback;
-import androidplugins.imagefetcher.ImageFetcher;
+import java.io.InputStream;
+
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
+import droidcon.service.APIClient;
+import droidcon.service.ResponseCallback;
+import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
 
-import static droidcon.cart.Constants.PRODUCT_KEY;
+import static droidcon.shopping.Constants.PRODUCT_KEY;
 
 public class ProductDetailsActivity extends Activity {
 
@@ -27,17 +30,27 @@ public class ProductDetailsActivity extends Activity {
     TextView imageTitle = (TextView) findViewById(R.id.product_title);
     imageTitle.setText(product.getTitle());
     ImageView imageView = (ImageView) findViewById(R.id.product_image);
-    ImageFetcher imageFetcher = new ImageFetcher(bitmapCallback(imageView), this);
-    imageFetcher.execute(product.getImageUrl());
+    APIClient contentFetcher = new APIClient("GET", bitmapCallback(imageView));
+    contentFetcher.execute(product.getImageUrl());
     TextView issueDescription = (TextView) findViewById(R.id.product_description);
     issueDescription.setText(product.getDescription());
   }
 
-  private Callback<Bitmap> bitmapCallback(final ImageView imageView) {
-    return new Callback<Bitmap>() {
+  private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
+    return new ResponseCallback<Bitmap>() {
       @Override
-      public void execute(Bitmap object) {
-        imageView.setImageBitmap(object);
+      public Bitmap parse(InputStream response) {
+        return ResponseParserFactory.bitmapParser().parse(response);
+      }
+
+      @Override
+      public void onSuccess(Bitmap response) {
+        imageView.setImageBitmap(response);
+      }
+
+      @Override
+      public void onError(Exception exception) {
+
       }
     };
   }

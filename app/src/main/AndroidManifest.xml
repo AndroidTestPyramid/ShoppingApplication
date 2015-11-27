@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.ProductDetailsActivity"
+            android:name="droidcon.shopping.view.ProductDetailsActivity"
             android:label="@string/title_activity_product_details"
             android:theme="@style/AppTheme">
         </activity>

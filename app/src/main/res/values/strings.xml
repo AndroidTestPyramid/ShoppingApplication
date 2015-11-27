@@ -18,4 +18,5 @@
   <string name="title_activity_product_details">ProductDetailsActivity</string>
   <string name="add_to_wishlist">Add to Wishlist</string>
   <string name="buy">Buy</string>
+  <string name="ok">Ok</string>
 </resources>

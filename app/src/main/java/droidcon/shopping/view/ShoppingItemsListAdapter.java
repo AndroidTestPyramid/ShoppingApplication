@@ -9,12 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidplugins.Callback;
-import androidplugins.imagefetcher.ImageFetcher;
 import droidcon.cart.R;
+import droidcon.service.APIClient;
+import droidcon.service.ResponseCallback;
+import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
 
 public class ShoppingItemsListAdapter extends BaseAdapter {
@@ -51,17 +53,27 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     TextView titleTextView = (TextView) convertView.findViewById(R.id.title);
     Product product = products.get(position);
     titleTextView.setText(product.getTitle());
-    ImageFetcher imageFetcher = new ImageFetcher(bitmapCallback(imageView), context);
-    imageFetcher.execute(product.getImageUrl());
+    APIClient contentFetcher = new APIClient("GET", bitmapCallback(imageView));
+    contentFetcher.execute(product.getImageUrl());
 
     return convertView;
   }
 
-  private Callback<Bitmap> bitmapCallback(final ImageView imageView) {
-    return new Callback<Bitmap>() {
+  private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
+    return new ResponseCallback<Bitmap>() {
       @Override
-      public void execute(Bitmap object) {
-        imageView.setImageBitmap(object);
+      public Bitmap parse(InputStream response) {
+        return ResponseParserFactory.bitmapParser().parse(response);
+      }
+
+      @Override
+      public void onSuccess(Bitmap response) {
+        imageView.setImageBitmap(response);
+      }
+
+      @Override
+      public void onError(Exception exception) {
+
       }
     };
   }

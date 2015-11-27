@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,8 +14,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidplugins.Callback;
-import androidplugins.LoginFetcher;
+import java.io.InputStream;
+
+import droidcon.service.ResponseCallback;
+import droidcon.service.APIClient;
+import droidcon.service.ResponseParserFactory;
 import droidcon.cart.R;
 import droidcon.shopping.view.ShoppingActivity;
 
@@ -54,28 +58,35 @@ public class LoginActivity extends Activity {
       boolean passwordValidation = validatePassword(password);
       if (passwordValidation) {
         showProgress();
-        new LoginFetcher(responseCallback(new Callback<String>() {
-          @Override
-          public void execute(String response) {
-            hideProgress();
-            if (response == null) {
-              Toast.makeText(LoginActivity.this, R.string.invalid_credential, Toast.LENGTH_SHORT).show();
-              emailView.setText(null);
-              passwordView.setText(null);
-              emailView.requestFocus();
-            } else
-              LoginActivity.this.startActivity(new Intent(LoginActivity.this, ShoppingActivity.class));
-          }
-        }), "GET").execute(String.format("http://xplorationstudio.com/sample_images/%s/%s.json", email, password));
+        new APIClient("GET", getCallback()).execute(String.format("http://xplorationstudio.com/sample_images/%s/%s.json", email, password));
       }
     }
   }
 
-  private Callback<String> responseCallback(final Callback<String> callback) {
-    return new Callback<String>() {
+  @NonNull
+  private ResponseCallback<String> getCallback() {
+    return new ResponseCallback<String>() {
       @Override
-      public void execute(String strJSONData) {
-        callback.execute(strJSONData);
+      public String parse(InputStream response) {
+        return ResponseParserFactory.jsonParser().parse(response);
+      }
+
+      @Override
+      public void onSuccess(String response) {
+        hideProgress();
+        if (response == null) {
+          Toast.makeText(LoginActivity.this, R.string.invalid_credential, Toast.LENGTH_SHORT).show();
+          emailView.setText(null);
+          passwordView.setText(null);
+          emailView.requestFocus();
+        } else
+          LoginActivity.this.startActivity(new Intent(LoginActivity.this, ShoppingActivity.class));
+      }
+
+      @Override
+      public void onError(Exception exception) {
+        hideProgress();
+        Toast.makeText(LoginActivity.this, R.string.technical_difficulty, Toast.LENGTH_SHORT).show();
       }
     };
   }

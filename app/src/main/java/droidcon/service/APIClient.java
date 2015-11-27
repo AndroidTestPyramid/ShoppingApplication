@@ -1,4 +1,4 @@
-package androidplugins;
+package droidcon.service;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,30 +12,28 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
-public class LoginFetcher extends AsyncTask<String, Void, String> {
+public class APIClient extends AsyncTask<String, Void, Object> {
 
-  private Callback<String> callback;
+  private final ResponseCallback responseCallback;
   private String requestType;
 
-  public LoginFetcher(Callback<String> callback, String RequestType) {
-    this.callback = callback;
-    requestType = RequestType;
+  public APIClient(String RequestType, ResponseCallback responseCallback) {
+    this.requestType = RequestType;
+    this.responseCallback = responseCallback;
   }
 
   @Override
-  protected String doInBackground(String... url) {
+  protected Object doInBackground(String... url) {
     return response(url[0]);
   }
 
-  public String response(String url) {
+  private Object response(String url) {
     HttpClient httpClient = new DefaultHttpClient();
     HttpRequestBase httpRequest = httpRequest(url);
-    String result = null;
+    Object result = null;
     try {
       HttpResponse httpResponse = httpClient.execute(httpRequest);
       StatusLine statusLine = httpResponse.getStatusLine();
@@ -43,11 +41,11 @@ public class LoginFetcher extends AsyncTask<String, Void, String> {
       if (statusCode >= 200 && statusCode <= 210) {
         HttpEntity httpEntity = httpResponse.getEntity();
         InputStream content = httpEntity.getContent();
-        result = toString(content);
+        result = responseCallback.parse(content);
       }
     } catch (IOException httpResponseError) {
-      Log.e("HTTP Response", "IO error");
-      return "404 error";
+      Log.e("HTTP Response", httpResponseError.toString());
+      return httpResponseError;
     }
     return result;
   }
@@ -60,23 +58,13 @@ public class LoginFetcher extends AsyncTask<String, Void, String> {
 
 
   @Override
-  protected void onPostExecute(String resultString) {
-    super.onPostExecute(resultString);
-    Log.d(this.getClass().getName(), "Content Data: " + resultString);
-    callback.execute(resultString);
+  protected void onPostExecute(Object result) {
+    if(result instanceof Exception){
+      responseCallback.onError((Exception) result);
+    }else {
+      Log.d(this.getClass().getName(), "Content Data: " + result);
+      responseCallback.onSuccess(result);
+    }
   }
 
-  private String toString(InputStream content) {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-    StringBuilder result = new StringBuilder();
-    String line;
-    try {
-      while ((line = reader.readLine()) != null) {
-        result.append(line);
-      }
-    } catch (IOException readerException) {
-      readerException.printStackTrace();
-    }
-    return result.toString();
-  }
 }

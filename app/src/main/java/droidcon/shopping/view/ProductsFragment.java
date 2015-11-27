@@ -1,6 +1,8 @@
 package droidcon.shopping.view;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,26 +13,28 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
-import androidplugins.Callback;
 import droidcon.cart.R;
-import droidcon.cart.view.ProductDetailsActivity;
+import droidcon.service.APIClient;
+import droidcon.service.ResponseCallback;
+import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
-import droidcon.shopping.service.ProductServiceClient;
+import droidcon.shopping.service.ProductsParser;
 
-import static droidcon.cart.Constants.PRODUCT_KEY;
+import static droidcon.shopping.Constants.PRODUCT_KEY;
 
 public class ProductsFragment extends Fragment {
 
+  public static final String PRODUCTS_URL = "http://xplorationstudio.com/sample_images/products.json";
   private ProgressDialog progressDialog;
   private GridView gridView;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    ProductServiceClient productServiceClient = new ProductServiceClient();
-    productServiceClient.getProducts(productsCallback());
+    new APIClient("GET", productsCallback()).execute(PRODUCTS_URL);
   }
 
   @Nullable
@@ -42,12 +46,28 @@ public class ProductsFragment extends Fragment {
     return view;
   }
 
-  private Callback<ArrayList<Product>> productsCallback() {
-    return new Callback<ArrayList<Product>>() {
+  private ResponseCallback<ArrayList<Product>> productsCallback() {
+    return new ResponseCallback<ArrayList<Product>>() {
       @Override
-      public void execute(ArrayList<Product> products) {
+      public ArrayList<Product> parse(InputStream response) {
+        return new ProductsParser().parseProducts(ResponseParserFactory.jsonParser().parse(response));
+      }
+
+      @Override
+      public void onSuccess(ArrayList<Product> response) {
         progressDialog.dismiss();
-        renderProducts(gridView, products);
+        renderProducts(gridView, response);
+      }
+
+      @Override
+      public void onError(Exception exception) {
+        progressDialog.dismiss();
+        new AlertDialog.Builder(getActivity()).setMessage(R.string.technical_difficulty).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            getActivity().finish();
+          }
+        });
       }
     };
   }
