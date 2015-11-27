@@ -3,59 +3,59 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-    <ScrollView
-        android:id="@+id/scroll_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/grey_white"
-        android:padding="15dp">
-
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/product_title"
+            android:background="@color/grey_white"
+            android:paddingBottom="45dp">
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textIsSelectable="false"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/product_image"
-                android:layout_width="250dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:adjustViewBounds="true"
-                android:background="@color/black"
-                android:cropToPadding="false"
-                android:maxHeight="150dp"
-                android:maxWidth="150dp"
-                android:padding="2dp"
-                android:scaleType="fitXY"/>
+                <TextView
+                    android:id="@+id/product_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textIsSelectable="false"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/product_description"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dip"
-                android:gravity="center"
-                android:singleLine="false"
-                android:textColor="@color/black"
-                android:textSize="34sp"/>
-        </LinearLayout>
-    </ScrollView>
+                <ImageView
+                    android:id="@+id/product_image"
+                    android:layout_width="250dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/black"
+                    android:cropToPadding="false"
+                    android:maxHeight="150dp"
+                    android:maxWidth="150dp"
+                    android:padding="2dp"
+                    android:scaleType="fitXY"/>
+
+                <TextView
+                    android:id="@+id/product_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dip"
+                    android:gravity="center"
+                    android:singleLine="false"
+                    android:textColor="@color/black"
+                    android:textSize="34sp"/>
+            </LinearLayout>
+        </ScrollView>
 
     <Button
         android:id="@+id/add_to_wishlist"
         android:layout_width="187dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
+        android:paddingTop="5dp"
         android:layout_alignParentBottom="true"
         android:background="@color/brown"
         android:text="@string/add_to_wishlist"/>
@@ -63,9 +63,10 @@
     <Button
         android:layout_width="180dp"
         android:paddingLeft="5dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:paddingTop="5dp"
         android:background="@color/brown"
         android:onClick="addToCart"
         android:text="@string/buy"

@@ -40,6 +40,7 @@
             android:id="@+id/upcoming_deal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="35dp"
             android:orientation="vertical"
             android:visibility="gone">
