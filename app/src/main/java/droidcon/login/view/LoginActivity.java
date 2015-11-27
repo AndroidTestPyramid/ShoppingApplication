@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.io.InputStream;
 
+import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
 import droidcon.service.APIClient;
 import droidcon.service.ResponseParserFactory;
@@ -24,6 +25,7 @@ import droidcon.shopping.view.ShoppingActivity;
 
 public class LoginActivity extends Activity {
 
+  public static final String LOGIN_URL = "http://xplorationstudio.com/sample_images/%s/%s.json";
   private EditText emailView;
   private EditText passwordView;
   private ProgressDialog progressDialog;
@@ -58,7 +60,7 @@ public class LoginActivity extends Activity {
       boolean passwordValidation = validatePassword(password);
       if (passwordValidation) {
         showProgress();
-        new APIClient("GET", getCallback()).execute(String.format("http://xplorationstudio.com/sample_images/%s/%s.json", email, password));
+        new APIClient(RequestType.GET, getCallback()).execute(String.format(LOGIN_URL, email, password));
       }
     }
   }

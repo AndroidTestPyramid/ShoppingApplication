@@ -15,6 +15,7 @@ import java.util.List;
 
 import droidcon.cart.R;
 import droidcon.service.APIClient;
+import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
@@ -53,8 +54,8 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     TextView titleTextView = (TextView) convertView.findViewById(R.id.title);
     Product product = products.get(position);
     titleTextView.setText(product.getTitle());
-    APIClient contentFetcher = new APIClient("GET", bitmapCallback(imageView));
-    contentFetcher.execute(product.getImageUrl());
+    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
+    apiClient.execute(product.getImageUrl());
 
     return convertView;
   }

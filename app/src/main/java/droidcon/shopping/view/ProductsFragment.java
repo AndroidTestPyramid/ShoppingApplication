@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import droidcon.cart.R;
 import droidcon.service.APIClient;
+import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
@@ -34,7 +35,7 @@ public class ProductsFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    new APIClient("GET", productsCallback()).execute(PRODUCTS_URL);
+    new APIClient(RequestType.GET, productsCallback()).execute(PRODUCTS_URL);
   }
 
   @Nullable

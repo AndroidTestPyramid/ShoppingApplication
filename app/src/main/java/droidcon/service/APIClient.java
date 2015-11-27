@@ -18,9 +18,9 @@ import java.io.InputStream;
 public class APIClient extends AsyncTask<String, Void, Object> {
 
   private final ResponseCallback responseCallback;
-  private String requestType;
+  private RequestType requestType;
 
-  public APIClient(String RequestType, ResponseCallback responseCallback) {
+  public APIClient(RequestType RequestType, ResponseCallback responseCallback) {
     this.requestType = RequestType;
     this.responseCallback = responseCallback;
   }
@@ -51,8 +51,8 @@ public class APIClient extends AsyncTask<String, Void, Object> {
   }
 
   private HttpRequestBase httpRequest(String url) {
-    if (requestType.equals("GET")) return new HttpGet(url);
-    else if (requestType.equals("POST")) return new HttpPost(url);
+    if (requestType == RequestType.GET) return new HttpGet(url);
+    else if (requestType == RequestType.POST) return new HttpPost(url);
     else return null;
   }
 
@@ -67,4 +67,8 @@ public class APIClient extends AsyncTask<String, Void, Object> {
     }
   }
 
+  public enum RequestType {
+    GET,
+    POST
+  }
 }

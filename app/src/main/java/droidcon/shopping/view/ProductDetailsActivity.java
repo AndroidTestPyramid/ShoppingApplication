@@ -12,6 +12,7 @@ import java.io.InputStream;
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
+import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
@@ -30,8 +31,8 @@ public class ProductDetailsActivity extends Activity {
     TextView imageTitle = (TextView) findViewById(R.id.product_title);
     imageTitle.setText(product.getTitle());
     ImageView imageView = (ImageView) findViewById(R.id.product_image);
-    APIClient contentFetcher = new APIClient("GET", bitmapCallback(imageView));
-    contentFetcher.execute(product.getImageUrl());
+    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
+    apiClient.execute(product.getImageUrl());
     TextView issueDescription = (TextView) findViewById(R.id.product_description);
     issueDescription.setText(product.getDescription());
   }
