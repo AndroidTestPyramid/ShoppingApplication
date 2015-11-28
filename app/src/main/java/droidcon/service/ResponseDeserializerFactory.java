@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class ResponseParserFactory {
+public class ResponseDeserializerFactory {
 
-  public static ResponseParser<String> jsonParser(){
-    return new ResponseParser<String>() {
+  public static ResponseDeserializer<String> jsonParser(){
+    return new ResponseDeserializer<String>() {
       @Override
-      public String parse(InputStream content) {
+      public String deserialize(InputStream content) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(content));
         StringBuilder result = new StringBuilder();
         String line;
@@ -29,10 +29,10 @@ public class ResponseParserFactory {
     };
   }
 
-  public static ResponseParser<Bitmap> bitmapParser() {
-    return new ResponseParser<Bitmap>() {
+  public static ResponseDeserializer<Bitmap> bitmapParser() {
+    return new ResponseDeserializer<Bitmap>() {
       @Override
-      public Bitmap parse(InputStream content) {
+      public Bitmap deserialize(InputStream content) {
         return BitmapFactory.decodeStream(content);
       }
     };

@@ -18,7 +18,7 @@ import droidcon.cart.R;
 import droidcon.service.APIClient;
 import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
-import droidcon.service.ResponseParserFactory;
+import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
 
 public class ShoppingItemsListAdapter extends BaseAdapter {
@@ -53,7 +53,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     renderProductTitle(convertView, product);
     renderProductImage(convertView, product);
     renderProductCost(convertView, product);
-    renderUpcomingDeal(convertView, product);
+    renderProductUpcomingDeal(convertView, product);
     renderProductPopularityStatus(convertView, product);
     return convertView;
   }
@@ -80,7 +80,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     }
   }
 
-  private void renderUpcomingDeal(View convertView, Product product) {
+  private void renderProductUpcomingDeal(View convertView, Product product) {
     if(product.anyUpcomingDeal()){
       final LinearLayout upcomingDealView = (LinearLayout)convertView.findViewById(R.id.upcoming_deal);
       upcomingDealView.setVisibility(View.VISIBLE);
@@ -113,7 +113,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     return new ResponseCallback<Bitmap>() {
       @Override
       public Bitmap deserialize(InputStream response) {
-        return ResponseParserFactory.bitmapParser().parse(response);
+        return ResponseDeserializerFactory.bitmapParser().deserialize(response);
       }
 
       @Override

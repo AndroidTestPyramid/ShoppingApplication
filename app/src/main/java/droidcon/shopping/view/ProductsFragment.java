@@ -25,7 +25,7 @@ import droidcon.cart.R;
 import droidcon.service.APIClient;
 import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
-import droidcon.service.ResponseParserFactory;
+import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
 
 public class ProductsFragment extends Fragment {
@@ -60,7 +60,7 @@ public class ProductsFragment extends Fragment {
       public ArrayList<Product> deserialize(InputStream response) {
         Gson gson = new GsonBuilder().create();
         Type listType = new TypeToken<ArrayList<Product>>() {}.getType();
-        ArrayList<Product> products = gson.fromJson(ResponseParserFactory.jsonParser().parse(response), listType);
+        ArrayList<Product> products = gson.fromJson(ResponseDeserializerFactory.jsonParser().deserialize(response), listType);
         return products;
       }
 

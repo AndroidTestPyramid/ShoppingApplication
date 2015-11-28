@@ -19,7 +19,7 @@ import droidcon.cart.R;
 import droidcon.service.APIClient;
 import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
-import droidcon.service.ResponseParserFactory;
+import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.view.ShoppingActivity;
 
 public class LoginActivity extends Activity {
@@ -71,7 +71,7 @@ public class LoginActivity extends Activity {
     return new ResponseCallback<String>() {
       @Override
       public String deserialize(InputStream response) {
-        return ResponseParserFactory.jsonParser().parse(response);
+        return ResponseDeserializerFactory.jsonParser().deserialize(response);
       }
 
       @Override

@@ -15,7 +15,7 @@ import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
 import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
-import droidcon.service.ResponseParserFactory;
+import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
 
 import static droidcon.shopping.view.ProductsFragment.PRODUCT_KEY;
@@ -34,8 +34,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     renderProductTitle();
     renderProductDescription();
     renderProductCost();
-    renderProductImage((ImageView) findViewById(R.id.product_image));
-    renderUpcomingDeal();
+    renderProductImage();
+    renderProductUpcomingDeal();
     renderProductPopularityStatus();
   }
 
@@ -84,8 +84,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     productTitle.setText(product.getTitle());
   }
 
-  private void renderProductImage(ImageView imageView) {
-    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
+  private void renderProductImage() {
+    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback((ImageView) findViewById(R.id.product_image)));
     apiClient.execute(product.getImageUrl());
   }
 
@@ -94,7 +94,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     costTextView.setText(String.format("%s%d", getString(R.string.cost), product.getPrice()));
   }
 
-  private void renderUpcomingDeal() {
+  private void renderProductUpcomingDeal() {
     if(product.anyUpcomingDeal()){
       final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.upcoming_deal);
       linearLayout.setVisibility(View.VISIBLE);
@@ -107,7 +107,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     return new ResponseCallback<Bitmap>() {
       @Override
       public Bitmap deserialize(InputStream response) {
-        return ResponseParserFactory.bitmapParser().parse(response);
+        return ResponseDeserializerFactory.bitmapParser().deserialize(response);
       }
 
       @Override

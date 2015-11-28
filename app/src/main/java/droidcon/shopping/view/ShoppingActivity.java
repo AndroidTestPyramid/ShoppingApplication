@@ -21,14 +21,36 @@ import droidcon.cart.model.ProductInCart;
 public class ShoppingActivity extends AppCompatActivity {
 
   private ViewPager viewPager;
-  private int numOfProductsInTheCart = 0;
+  private long numOfProductsInTheCart = 0;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.shopping_activity);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
+    setupActionBar();
+    setupViewPager();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    setNumOfProductsInCart();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.cart_menu, menu);
+
+    final MenuItem item = menu.findItem(R.id.cart);
+    MenuItemCompat.setActionView(item, R.layout.cart_update_count);
+    View count = item.getActionView();
+    Button cart = (Button) count.findViewById(R.id.num_of_products);
+    cart.setText(String.valueOf(numOfProductsInTheCart));
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  private void setupViewPager() {
     TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
     tabLayout.addTab(tabLayout.newTab().setText(R.string.electronics));
     tabLayout.addTab(tabLayout.newTab().setText(R.string.accessories));
@@ -55,28 +77,13 @@ public class ShoppingActivity extends AppCompatActivity {
     });
   }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    setNumOfProductsInCart();
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.cart_menu, menu);
-
-    final MenuItem item = menu.findItem(R.id.cart);
-    MenuItemCompat.setActionView(item, R.layout.cart_update_count);
-    View count = item.getActionView();
-    Button cart = (Button) count.findViewById(R.id.num_of_products);
-    cart.setText(String.valueOf(numOfProductsInTheCart));
-    return super.onCreateOptionsMenu(menu);
+  private void setupActionBar() {
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
   }
 
   private void setNumOfProductsInCart(){
-    final long productInCarts = ProductInCart.count(ProductInCart.class, null, null);
-    numOfProductsInTheCart = (int)productInCarts;
+    numOfProductsInTheCart = ProductInCart.count(ProductInCart.class, null, null);
     invalidateOptionsMenu();
   }
 
