@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/yellow</item>
+        <item name="colorPrimaryDark">@color/light_yellow</item>
+        <item name="colorAccent">@color/material_blue_grey_800</item>
+    </style>
+    <style name="Theme.MyAppTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="actionBarStyle">@style/ActionBarTabStyle</item>
+    </style>
+</resources>
