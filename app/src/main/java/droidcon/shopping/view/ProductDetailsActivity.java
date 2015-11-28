@@ -1,16 +1,14 @@
 package droidcon.shopping.view;
 
-import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.InputStream;
-
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
@@ -34,7 +32,23 @@ public class ProductDetailsActivity extends AppCompatActivity {
     product = getIntent().getExtras().getParcelable(PRODUCT_KEY);
     renderProductTitle();
     renderProductDescription();
+    renderProductCost();
     renderProductImage((ImageView) findViewById(R.id.product_image));
+    renderUpcomingDeal();
+  }
+
+  private void renderProductCost() {
+    TextView costTextView = (TextView) findViewById(R.id.cost);
+    costTextView.setText(String.format("%s%d", getString(R.string.cost), product.getPrice()));
+  }
+
+  private void renderUpcomingDeal() {
+    if(product.getUpcomingDeal() != 0){
+      final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.upcoming_deal);
+      linearLayout.setVisibility(View.VISIBLE);
+      final TextView upcomingDeal = (TextView) findViewById(R.id.percentage);
+      upcomingDeal.setText(String.format("%d%s", product.getUpcomingDeal(), getString(R.string.percentage_sign)));
+    }
   }
 
   public void addToCart(View view) {
@@ -49,8 +63,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
   }
 
   private void renderProductTitle() {
-    TextView imageTitle = (TextView) findViewById(R.id.product_title);
-    imageTitle.setText(product.getTitle());
+    TextView productTitle = (TextView) findViewById(R.id.product_title);
+    productTitle.setText(product.getTitle());
   }
 
   private void renderProductImage(ImageView imageView) {
@@ -76,5 +90,4 @@ public class ProductDetailsActivity extends AppCompatActivity {
       }
     };
   }
-
 }
