@@ -22,11 +22,9 @@ import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
 
 public class ShoppingItemsListAdapter extends BaseAdapter {
-  private final Context context;
   public List<Product> products = new ArrayList<>();
 
-  public ShoppingItemsListAdapter(Context context, List<Product> products) {
-    this.context = context;
+  public ShoppingItemsListAdapter(List<Product> products) {
     this.products = products;
   }
 
@@ -49,14 +47,37 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
-      convertView = LayoutInflater.from(context).inflate(R.layout.product_layout, parent, false);
+      convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout, parent, false);
     }
     Product product = products.get(position);
     renderProductTitle(convertView, product);
     renderProductImage(convertView, product);
     renderProductCost(convertView, product);
     renderUpcomingDeal(convertView, product);
+    renderProductPopularityStatus(convertView, product);
     return convertView;
+  }
+
+  private void renderProductPopularityStatus(View convertView, Product product) {
+    String popularity = null;
+    int textColor = 0;
+    Context context = convertView.getContext();
+    TextView popularityView = (TextView) convertView.findViewById(R.id.popularity);
+    if(product.isNew()){
+      popularity = context.getString(R.string.product_new);
+      textColor = R.color.green;
+    }
+    if(product.isPopular()){
+      popularity = context.getString(R.string.popular);
+      textColor = R.color.purple;
+    }
+    if(popularity != null) {
+      popularityView.setText(popularity);
+      popularityView.setTextColor(context.getResources().getColor(textColor));
+      popularityView.setVisibility(View.VISIBLE);
+    }else{
+      popularityView.setVisibility(View.GONE);
+    }
   }
 
   private void renderUpcomingDeal(View convertView, Product product) {
@@ -64,7 +85,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
       final LinearLayout upcomingDealView = (LinearLayout)convertView.findViewById(R.id.upcoming_deal);
       upcomingDealView.setVisibility(View.VISIBLE);
       TextView percentage = (TextView) convertView.findViewById(R.id.percentage);
-      percentage.setText(String.format("%d%s", product.getUpcomingDeal(), context.getString(R.string.percentage_sign)));
+      percentage.setText(String.format("%d%s", product.getUpcomingDeal(), convertView.getContext().getString(R.string.percentage_sign)));
     }
   }
 
@@ -80,7 +101,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
 
   private void renderProductCost(View convertView, Product product) {
     TextView costTextView = (TextView) convertView.findViewById(R.id.cost);
-    costTextView.setText(String.format("%s%d", context.getString(R.string.cost), product.getPrice()));
+    costTextView.setText(String.format("%s%d", convertView.getContext().getString(R.string.cost), product.getPrice()));
   }
 
   private void fetchBitmap(ImageView imageView, String imageUrl) {

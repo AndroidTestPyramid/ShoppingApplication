@@ -1,5 +1,6 @@
 package droidcon.shopping.view;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
     renderProductCost();
     renderProductImage((ImageView) findViewById(R.id.product_image));
     renderUpcomingDeal();
+    renderProductPopularityStatus();
+  }
+
+  public void addToCart(View view) {
+    Toast.makeText(this, R.string.addedToCart, Toast.LENGTH_SHORT).show();
+    final ProductInCart productInCart = new ProductInCart(product.getProductId());
+    productInCart.save();
   }
 
   @Override
@@ -48,10 +56,23 @@ public class ProductDetailsActivity extends AppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
-  public void addToCart(View view) {
-    Toast.makeText(this, R.string.addedToCart, Toast.LENGTH_SHORT).show();
-    final ProductInCart productInCart = new ProductInCart(product.getProductId());
-    productInCart.save();
+  private void renderProductPopularityStatus() {
+    String popularity = null;
+    int textColor = 0;
+    TextView popularityView = (TextView)findViewById(R.id.popularity);
+    if(product.isNew()){
+      popularity = getString(R.string.product_new);
+      textColor = R.color.green;
+    }
+    if(product.isPopular()){
+      popularity = getString(R.string.popular);
+      textColor = R.color.purple;
+    }
+    if(popularity != null) {
+      popularityView.setText(popularity);
+      popularityView.setTextColor(getResources().getColor(textColor));
+      popularityView.setVisibility(View.VISIBLE);
+    }
   }
 
   private void renderProductDescription() {

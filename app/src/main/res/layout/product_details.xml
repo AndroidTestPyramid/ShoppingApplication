@@ -1,34 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
+                android:background="@color/white"
                 android:layout_height="fill_parent">
 
-    <ImageView
-        android:id="@+id/product_image"
-        android:layout_width="match_parent"
-        android:layout_height="370dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:adjustViewBounds="true"
-        android:cropToPadding="false"
-        android:maxHeight="150dp"
-        android:maxWidth="150dp"
-        android:padding="2dp"
-        android:src="@drawable/ic_launcher"
-        android:scaleType="fitXY"/>
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingTop="350dp"
-        android:paddingBottom="45dp">
+        android:paddingBottom="45dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical">
+
+          <TextView
+            android:id="@+id/popularity"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="@string/product_new"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+            <ImageView
+              android:id="@+id/product_image"
+              android:layout_width="match_parent"
+              android:layout_height="370dp"
+              android:layout_gravity="center"
+              android:layout_marginTop="15dp"
+              android:adjustViewBounds="true"
+              android:cropToPadding="false"
+              android:maxHeight="150dp"
+              android:layout_below="@+id/popularity"
+              android:maxWidth="150dp"
+              android:padding="2dp"
+              android:src="@drawable/ic_launcher"
+              android:scaleType="fitXY"/>
 
             <TextView
                 android:id="@+id/product_title"
@@ -80,7 +93,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dip"
-                android:gravity="center"
+                android:gravity="left"
                 android:singleLine="false"
                 android:textColor="@color/black"
                 android:textSize="20sp"/>

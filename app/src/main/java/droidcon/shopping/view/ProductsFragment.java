@@ -85,7 +85,7 @@ public class ProductsFragment extends Fragment {
   }
 
   private void renderProducts(GridView gridView, final ArrayList<Product> products) {
-    gridView.setAdapter(new ShoppingItemsListAdapter(getActivity(), products));
+    gridView.setAdapter(new ShoppingItemsListAdapter(products));
 
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override

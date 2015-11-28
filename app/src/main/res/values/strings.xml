@@ -24,4 +24,6 @@
   <string name="upcoming_deal">Upcoming deal</string>
   <string name="cost">Rs. </string>
   <string name="percentage_sign">%</string>
+  <string name="product_new">New</string>
+  <string name="popular">Popular</string>
 </resources>
