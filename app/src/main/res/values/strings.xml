@@ -9,7 +9,6 @@
   <string name="action_sign_in">Sign in</string>
   <string name="error_invalid_email">This email address is invalid</string>
   <string name="error_invalid_password">This password is too short</string>
-  <string name="error_incorrect_email">This password is incorrect</string>
   <string name="error_field_required">This field is required</string>
   <string name="signing_in">Signing in...</string>
   <string name="technical_difficulty">There is some technical difficulties</string>

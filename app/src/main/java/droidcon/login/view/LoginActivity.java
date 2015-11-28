@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -13,18 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
-
 import droidcon.cart.R;
+import droidcon.login.presenter.LoginPresenter;
+import droidcon.login.service.LoginService;
 import droidcon.service.APIClient;
-import droidcon.service.APIClient.RequestType;
-import droidcon.service.ResponseCallback;
-import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.view.ShoppingActivity;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements LoginView {
 
-  public static final String LOGIN_URL = "http://xplorationstudio.com/sample_images/%s/%s.json";
   private EditText emailView;
   private EditText passwordView;
   private ProgressDialog progressDialog;
@@ -52,95 +46,45 @@ public class LoginActivity extends Activity {
     String email = emailView.getText().toString();
     String password = passwordView.getText().toString();
 
-    boolean emailValidation = validateEmail(email);
-    if (emailValidation) {
-      boolean passwordValidation = validatePassword(password);
-      if (passwordValidation) {
-        showProgress();
-        checkLogin(email, password);
-      }
-    }
+    new LoginPresenter(this, new LoginService(new APIClient())).login(email, password);
   }
 
-  private void checkLogin(String email, String password) {
-    new APIClient(RequestType.GET, getCallback()).execute(String.format(LOGIN_URL, email, password));
+  @Override
+  public void showProgressDialog(int message) {
+    progressDialog = ProgressDialog.show(this, "", getString(message));
   }
 
-  @NonNull
-  private ResponseCallback<String> getCallback() {
-    return new ResponseCallback<String>() {
-      @Override
-      public String deserialize(InputStream response) {
-        return ResponseDeserializerFactory.jsonParser().deserialize(response);
-      }
-
-      @Override
-      public void onSuccess(String response) {
-        hideProgress();
-        if (response == null) {
-          Toast.makeText(LoginActivity.this, R.string.invalid_credential, Toast.LENGTH_SHORT).show();
-          emailView.setText(null);
-          passwordView.setText(null);
-          emailView.requestFocus();
-        } else
-          LoginActivity.this.startActivity(new Intent(LoginActivity.this, ShoppingActivity.class));
-      }
-
-      @Override
-      public void onError(Exception exception) {
-        hideProgress();
-        Toast.makeText(LoginActivity.this, R.string.technical_difficulty, Toast.LENGTH_SHORT).show();
-      }
-    };
-  }
-
-  private boolean validateEmail(String email) {
-    if (validateEmptyTextField(emailView)) {
-      if (!isEmailValid(email)) {
-        emailView.setError(getString(R.string.error_invalid_email));
-        emailView.requestFocus();
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }
-
-  private boolean validatePassword(String password) {
-    if (validateEmptyTextField(passwordView)) {
-      if (!isPasswordValid(password)) {
-        passwordView.setError(getString(R.string.error_invalid_password));
-        passwordView.requestFocus();
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }
-
-  private boolean validateEmptyTextField(EditText editText) {
-    if (TextUtils.isEmpty(editText.getText())) {
-      editText.setError(getString(R.string.error_field_required));
-      editText.requestFocus();
-      return false;
-    }
-    return true;
-  }
-
-  private boolean isEmailValid(String email) {
-    return email.contains("@");
-  }
-
-  private boolean isPasswordValid(String password) {
-    return password.length() > 4;
-  }
-
-
-  private void showProgress() {
-    progressDialog = ProgressDialog.show(this, "", getString(R.string.signing_in, true, false));
-  }
-
-  private void hideProgress() {
+  @Override
+  public void hideProgressDialog() {
     progressDialog.hide();
+  }
+
+  @Override
+  public void showErrorOnInvalidCredential(int errorMessage) {
+    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+    emailView.setText(null);
+    passwordView.setText(null);
+  }
+
+  @Override
+  public void navigateToShoppingActivity() {
+    LoginActivity.this.startActivity(new Intent(LoginActivity.this, ShoppingActivity.class));
+  }
+
+  @Override
+  public void showTechnicalDifficultyError(int technicalDifficultyError) {
+    Toast.makeText(LoginActivity.this, technicalDifficultyError, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void showErrorOnInvalidEmail(int errorMessage) {
+    emailView.setError(getString(errorMessage));
+    emailView.requestFocus();
+  }
+
+  @Override
+  public void showErrorOnInvalidPassword(int errorMessage) {
+    passwordView.setError(getString(errorMessage));
+    passwordView.requestFocus();
   }
 }

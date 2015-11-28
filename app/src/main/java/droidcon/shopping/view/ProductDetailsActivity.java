@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.InputStream;
+
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
@@ -85,8 +87,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
   }
 
   private void renderProductImage() {
-    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback((ImageView) findViewById(R.id.product_image)));
-    apiClient.execute(product.getImageUrl());
+    APIClient apiClient = new APIClient();
+    apiClient.execute(RequestType.GET, product.getImageUrl(), bitmapCallback((ImageView) findViewById(R.id.product_image)));
   }
 
   private void renderProductCost() {

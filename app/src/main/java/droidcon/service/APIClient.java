@@ -15,19 +15,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class APIClient extends AsyncTask<String, Void, Object> {
+public class APIClient extends AsyncTask<Object, Void, Object> {
 
-  private final ResponseCallback responseCallback;
+  private ResponseCallback responseCallback;
   private RequestType requestType;
 
-  public APIClient(RequestType RequestType, ResponseCallback responseCallback) {
-    this.requestType = RequestType;
-    this.responseCallback = responseCallback;
-  }
-
   @Override
-  protected Object doInBackground(String... url) {
-    return response(url[0]);
+  protected Object doInBackground(Object... params) {
+    this.requestType = (RequestType) params[0];
+    this.responseCallback = (ResponseCallback) params[2];
+    return response((String) params[1]);
   }
 
   private Object response(String url) {

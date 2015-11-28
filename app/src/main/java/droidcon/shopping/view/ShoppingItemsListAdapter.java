@@ -63,26 +63,26 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     int textColor = 0;
     Context context = convertView.getContext();
     TextView popularityView = (TextView) convertView.findViewById(R.id.popularity);
-    if(product.isNew()){
+    if (product.isNew()) {
       popularity = context.getString(R.string.product_new);
       textColor = R.color.green;
     }
-    if(product.isPopular()){
+    if (product.isPopular()) {
       popularity = context.getString(R.string.popular);
       textColor = R.color.purple;
     }
-    if(popularity != null) {
+    if (popularity != null) {
       popularityView.setText(popularity);
       popularityView.setTextColor(context.getResources().getColor(textColor));
       popularityView.setVisibility(View.VISIBLE);
-    }else{
+    } else {
       popularityView.setVisibility(View.GONE);
     }
   }
 
   private void renderProductUpcomingDeal(View convertView, Product product) {
-    if(product.anyUpcomingDeal()){
-      final LinearLayout upcomingDealView = (LinearLayout)convertView.findViewById(R.id.upcoming_deal);
+    if (product.anyUpcomingDeal()) {
+      final LinearLayout upcomingDealView = (LinearLayout) convertView.findViewById(R.id.upcoming_deal);
       upcomingDealView.setVisibility(View.VISIBLE);
       TextView percentage = (TextView) convertView.findViewById(R.id.percentage);
       percentage.setText(String.format("%d%s", product.getUpcomingDeal(), convertView.getContext().getString(R.string.percentage_sign)));
@@ -105,8 +105,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
   }
 
   private void fetchBitmap(ImageView imageView, String imageUrl) {
-    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
-    apiClient.execute(imageUrl);
+    new APIClient().execute(RequestType.GET, imageUrl, bitmapCallback(imageView));
   }
 
   private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {

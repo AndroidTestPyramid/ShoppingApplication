@@ -51,7 +51,7 @@ public class ProductsFragment extends Fragment {
   }
 
   private void fetchProducts() {
-    new APIClient(RequestType.GET, productsCallback()).execute(PRODUCTS_URL);
+    new APIClient().execute(RequestType.GET, PRODUCTS_URL, productsCallback());
   }
 
   private ResponseCallback<ArrayList<Product>> productsCallback() {
