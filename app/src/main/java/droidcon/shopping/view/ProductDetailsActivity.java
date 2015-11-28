@@ -1,6 +1,5 @@
 package droidcon.shopping.view;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +18,7 @@ import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
 
-import static droidcon.shopping.Constants.PRODUCT_KEY;
+import static droidcon.shopping.view.ProductsFragment.PRODUCT_KEY;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 

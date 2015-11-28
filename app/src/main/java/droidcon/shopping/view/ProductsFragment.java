@@ -28,11 +28,10 @@ import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseParserFactory;
 import droidcon.shopping.model.Product;
 
-import static droidcon.shopping.Constants.PRODUCT_KEY;
-
 public class ProductsFragment extends Fragment {
 
   public static final String PRODUCTS_URL = "http://xplorationstudio.com/sample_images/products.json";
+  public static final String PRODUCT_KEY = "droidcon.cart.current_product";
   private ProgressDialog progressDialog;
   private GridView gridView;
 
