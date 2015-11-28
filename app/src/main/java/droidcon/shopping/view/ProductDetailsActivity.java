@@ -96,7 +96,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
   }
 
   private void renderUpcomingDeal() {
-    if(product.getUpcomingDeal() != 0){
+    if(product.anyUpcomingDeal()){
       final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.upcoming_deal);
       linearLayout.setVisibility(View.VISIBLE);
       final TextView upcomingDeal = (TextView) findViewById(R.id.percentage);

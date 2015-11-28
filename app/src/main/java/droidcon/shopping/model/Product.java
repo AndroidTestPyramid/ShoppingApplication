@@ -53,6 +53,10 @@ public class Product implements Parcelable {
     return isPopular;
   }
 
+  public boolean anyUpcomingDeal() {
+    return upcomingDeal != 0;
+  }
+
   @Override
   public String toString() {
     return title;

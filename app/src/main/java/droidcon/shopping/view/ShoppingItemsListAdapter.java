@@ -81,7 +81,7 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
   }
 
   private void renderUpcomingDeal(View convertView, Product product) {
-    if(product.getUpcomingDeal() != 0){
+    if(product.anyUpcomingDeal()){
       final LinearLayout upcomingDealView = (LinearLayout)convertView.findViewById(R.id.upcoming_deal);
       upcomingDealView.setVisibility(View.VISIBLE);
       TextView percentage = (TextView) convertView.findViewById(R.id.percentage);
