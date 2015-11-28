@@ -47,7 +47,7 @@
                     android:gravity="center"
                     android:singleLine="false"
                     android:textColor="@color/black"
-                    android:textSize="34sp"/>
+                    android:textSize="24sp"/>
             </LinearLayout>
         </ScrollView>
 

@@ -1,8 +1,9 @@
 package droidcon.shopping.view;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ import droidcon.shopping.model.Product;
 
 import static droidcon.shopping.Constants.PRODUCT_KEY;
 
-public class ProductDetailsActivity extends Activity {
+public class ProductDetailsActivity extends AppCompatActivity {
 
   private Product product;
 
@@ -28,6 +29,8 @@ public class ProductDetailsActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.product_details);
+    final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+    actionBar.setDisplayHomeAsUpEnabled(true);
     product = getIntent().getExtras().getParcelable(PRODUCT_KEY);
     renderProductTitle();
     renderProductDescription();
