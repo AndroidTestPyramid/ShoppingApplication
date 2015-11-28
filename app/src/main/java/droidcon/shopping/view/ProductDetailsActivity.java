@@ -3,6 +3,7 @@ package droidcon.shopping.view;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,18 +38,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
     renderUpcomingDeal();
   }
 
-  private void renderProductCost() {
-    TextView costTextView = (TextView) findViewById(R.id.cost);
-    costTextView.setText(String.format("%s%d", getString(R.string.cost), product.getPrice()));
-  }
-
-  private void renderUpcomingDeal() {
-    if(product.getUpcomingDeal() != 0){
-      final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.upcoming_deal);
-      linearLayout.setVisibility(View.VISIBLE);
-      final TextView upcomingDeal = (TextView) findViewById(R.id.percentage);
-      upcomingDeal.setText(String.format("%d%s", product.getUpcomingDeal(), getString(R.string.percentage_sign)));
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        onBackPressed();
+        return true;
     }
+    return super.onOptionsItemSelected(item);
   }
 
   public void addToCart(View view) {
@@ -70,6 +67,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
   private void renderProductImage(ImageView imageView) {
     APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback(imageView));
     apiClient.execute(product.getImageUrl());
+  }
+
+  private void renderProductCost() {
+    TextView costTextView = (TextView) findViewById(R.id.cost);
+    costTextView.setText(String.format("%s%d", getString(R.string.cost), product.getPrice()));
+  }
+
+  private void renderUpcomingDeal() {
+    if(product.getUpcomingDeal() != 0){
+      final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.upcoming_deal);
+      linearLayout.setVisibility(View.VISIBLE);
+      final TextView upcomingDeal = (TextView) findViewById(R.id.percentage);
+      upcomingDeal.setText(String.format("%d%s", product.getUpcomingDeal(), getString(R.string.percentage_sign)));
+    }
   }
 
   private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
