@@ -144,4 +144,3 @@ public class LoginActivity extends Activity {
     progressDialog.hide();
   }
 }
-
