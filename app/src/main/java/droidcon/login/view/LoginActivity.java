@@ -137,7 +137,7 @@ public class LoginActivity extends Activity {
 
 
   private void showProgress() {
-    progressDialog = ProgressDialog.show(this, "", getString(R.string.logging_in, true, false));
+    progressDialog = ProgressDialog.show(this, "", getString(R.string.signing_in, true, false));
   }
 
   private void hideProgress() {
