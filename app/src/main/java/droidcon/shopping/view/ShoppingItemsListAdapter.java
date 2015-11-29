@@ -10,22 +10,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import droidcon.cart.R;
 import droidcon.service.APIClient;
-import droidcon.service.APIClient.RequestType;
-import droidcon.service.ResponseCallback;
-import droidcon.service.ResponseDeserializerFactory;
-import droidcon.shopping.model.Product;
+import droidcon.shopping.presenter.ProductImagePresenter;
+import droidcon.shopping.service.ImageFetcher;
+import droidcon.shopping.util.StringResolver;
+import droidcon.shopping.viewmodel.ProductViewModel;
 
-public class ShoppingItemsListAdapter extends BaseAdapter {
-  public List<Product> products = new ArrayList<>();
+public class ShoppingItemsListAdapter extends BaseAdapter implements ProductImageView {
+  private final StringResolver stringResolver;
+  public List<ProductViewModel> products = new ArrayList<>();
+  private Context context;
 
-  public ShoppingItemsListAdapter(List<Product> products) {
+  public ShoppingItemsListAdapter(List<ProductViewModel> products, Context context) {
     this.products = products;
+    stringResolver = new StringResolver(context);
+    this.context = context;
   }
 
   @Override
@@ -43,87 +46,52 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     return 0;
   }
 
-
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout, parent, false);
     }
-    Product product = products.get(position);
+    ProductViewModel product = products.get(position);
     renderProductTitle(convertView, product);
-    renderProductImage(convertView, product);
+    fetchImage(convertView, product);
     renderProductCost(convertView, product);
     renderProductUpcomingDeal(convertView, product);
     renderProductPopularityStatus(convertView, product);
     return convertView;
   }
 
-  private void renderProductPopularityStatus(View convertView, Product product) {
-    String popularity = null;
-    int textColor = 0;
-    Context context = convertView.getContext();
+  private void renderProductPopularityStatus(View convertView, ProductViewModel product) {
     TextView popularityView = (TextView) convertView.findViewById(R.id.popularity);
-    if (product.isNew()) {
-      popularity = context.getString(R.string.product_new);
-      textColor = R.color.green;
-    }
-    if (product.isPopular()) {
-      popularity = context.getString(R.string.popular);
-      textColor = R.color.purple;
-    }
-    if (popularity != null) {
-      popularityView.setText(popularity);
-      popularityView.setTextColor(context.getResources().getColor(textColor));
-      popularityView.setVisibility(View.VISIBLE);
-    } else {
-      popularityView.setVisibility(View.GONE);
-    }
+    popularityView.setText(product.getPopularityLabel(stringResolver));
+    popularityView.setTextColor(context.getResources().getColor(product.getPopularityTextColor()));
+    popularityView.setVisibility(product.getPopularityVisibilityStatus());
   }
 
-  private void renderProductUpcomingDeal(View convertView, Product product) {
-    if (product.anyUpcomingDeal()) {
-      final LinearLayout upcomingDealView = (LinearLayout) convertView.findViewById(R.id.upcoming_deal);
-      upcomingDealView.setVisibility(View.VISIBLE);
-      TextView percentage = (TextView) convertView.findViewById(R.id.percentage);
-      percentage.setText(String.format("%d%s", product.getUpcomingDeal(), convertView.getContext().getString(R.string.percentage_sign)));
-    }
+  private void renderProductUpcomingDeal(View convertView, ProductViewModel product) {
+    final LinearLayout upcomingDealView = (LinearLayout) convertView.findViewById(R.id.upcoming_deal);
+    upcomingDealView.setVisibility(product.getUpcomingDealVisibilityStatus());
+    TextView percentage = (TextView) convertView.findViewById(R.id.percentage);
+    percentage.setText(product.getUpcomingDeal(stringResolver));
   }
 
-  private void renderProductTitle(View convertView, Product product) {
+  private void renderProductTitle(View convertView, ProductViewModel product) {
     TextView titleTextView = (TextView) convertView.findViewById(R.id.title);
     titleTextView.setText(product.getTitle());
   }
 
-  private void renderProductImage(View convertView, Product product) {
-    ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
-    fetchBitmap(imageView, product.getImageUrl());
+  //TODO: look at removing imageView dependency
+  private void fetchImage(View convertView, ProductViewModel product) {
+    new ProductImagePresenter(this, new ImageFetcher(new APIClient())).fetchImageFor((ImageView) convertView.findViewById(R.id.imageView), product.getImageUrl());
   }
 
-  private void renderProductCost(View convertView, Product product) {
+  private void renderProductCost(View convertView, ProductViewModel product) {
     TextView costTextView = (TextView) convertView.findViewById(R.id.cost);
-    costTextView.setText(String.format("%s%d", convertView.getContext().getString(R.string.cost), product.getPrice()));
+    costTextView.setText(product.getPrice(stringResolver));
   }
 
-  private void fetchBitmap(ImageView imageView, String imageUrl) {
-    new APIClient().execute(RequestType.GET, imageUrl, bitmapCallback(imageView));
-  }
-
-  private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
-    return new ResponseCallback<Bitmap>() {
-      @Override
-      public Bitmap deserialize(InputStream response) {
-        return ResponseDeserializerFactory.bitmapParser().deserialize(response);
-      }
-
-      @Override
-      public void onSuccess(Bitmap response) {
-        imageView.setImageBitmap(response);
-      }
-
-      @Override
-      public void onError(Exception exception) {
-
-      }
-    };
+  @Override
+  public void renderImageFor(ImageView view, Bitmap response) {
+    ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
+    imageView.setImageBitmap(response);
   }
 }

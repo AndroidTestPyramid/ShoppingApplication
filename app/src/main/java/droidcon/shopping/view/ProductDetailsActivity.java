@@ -10,21 +10,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
-
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
-import droidcon.service.APIClient.RequestType;
-import droidcon.service.ResponseCallback;
-import droidcon.service.ResponseDeserializerFactory;
-import droidcon.shopping.model.Product;
+import droidcon.shopping.presenter.ProductImagePresenter;
+import droidcon.shopping.service.ImageFetcher;
+import droidcon.shopping.util.StringResolver;
+import droidcon.shopping.viewmodel.ProductViewModel;
 
-import static droidcon.shopping.view.ProductsFragment.PRODUCT_KEY;
+import static droidcon.shopping.view.ElectronicsFragment.PRODUCT_KEY;
 
-public class ProductDetailsActivity extends AppCompatActivity {
+// TODO: Do we need another presenter?
+public class ProductDetailsActivity extends AppCompatActivity implements ProductImageView {
 
-  private Product product;
+  private ProductViewModel product;
+  private StringResolver stringResolver;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     product = getIntent().getExtras().getParcelable(PRODUCT_KEY);
+    stringResolver = new StringResolver(this);
     renderProductTitle();
     renderProductDescription();
     renderProductCost();
@@ -58,22 +59,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
   }
 
   private void renderProductPopularityStatus() {
-    String popularity = null;
-    int textColor = 0;
-    TextView popularityView = (TextView)findViewById(R.id.popularity);
-    if(product.isNew()){
-      popularity = getString(R.string.product_new);
-      textColor = R.color.green;
-    }
-    if(product.isPopular()){
-      popularity = getString(R.string.popular);
-      textColor = R.color.purple;
-    }
-    if(popularity != null) {
-      popularityView.setText(popularity);
-      popularityView.setTextColor(getResources().getColor(textColor));
-      popularityView.setVisibility(View.VISIBLE);
-    }
+    TextView popularityView = (TextView) findViewById(R.id.popularity);
+    popularityView.setText(product.getPopularityLabel(stringResolver));
+    popularityView.setTextColor(getResources().getColor(product.getPopularityTextColor()));
+    popularityView.setVisibility(product.getPopularityVisibilityStatus());
   }
 
   private void renderProductDescription() {
@@ -87,40 +76,23 @@ public class ProductDetailsActivity extends AppCompatActivity {
   }
 
   private void renderProductImage() {
-    APIClient apiClient = new APIClient();
-    apiClient.execute(RequestType.GET, product.getImageUrl(), bitmapCallback((ImageView) findViewById(R.id.product_image)));
+    new ProductImagePresenter(this, new ImageFetcher(new APIClient())).fetchImageFor((ImageView) findViewById(R.id.product_image), product.getImageUrl());
   }
 
   private void renderProductCost() {
     TextView costTextView = (TextView) findViewById(R.id.cost);
-    costTextView.setText(String.format("%s%d", getString(R.string.cost), product.getPrice()));
+    costTextView.setText(product.getPrice(stringResolver));
   }
 
   private void renderProductUpcomingDeal() {
-    if(product.anyUpcomingDeal()){
-      final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.upcoming_deal);
-      linearLayout.setVisibility(View.VISIBLE);
-      final TextView upcomingDeal = (TextView) findViewById(R.id.percentage);
-      upcomingDeal.setText(String.format("%d%s", product.getUpcomingDeal(), getString(R.string.percentage_sign)));
-    }
+    final LinearLayout upcomingDealView = (LinearLayout) findViewById(R.id.upcoming_deal);
+    upcomingDealView.setVisibility(product.getUpcomingDealVisibilityStatus());
+    TextView percentage = (TextView) findViewById(R.id.percentage);
+    percentage.setText(product.getUpcomingDeal(stringResolver));
   }
 
-  private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
-    return new ResponseCallback<Bitmap>() {
-      @Override
-      public Bitmap deserialize(InputStream response) {
-        return ResponseDeserializerFactory.bitmapParser().deserialize(response);
-      }
-
-      @Override
-      public void onSuccess(Bitmap response) {
-        imageView.setImageBitmap(response);
-      }
-
-      @Override
-      public void onError(Exception exception) {
-
-      }
-    };
+  @Override
+  public void renderImageFor(ImageView view, Bitmap response) {
+    view.setImageBitmap(response);
   }
 }

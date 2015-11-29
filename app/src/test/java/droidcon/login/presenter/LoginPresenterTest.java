@@ -100,5 +100,4 @@ public class LoginPresenterTest {
 
     loginView.navigateToShoppingActivity();
   }
-
 }

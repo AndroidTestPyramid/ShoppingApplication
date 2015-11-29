@@ -15,6 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 
@@ -22,13 +25,21 @@ public class ShoppingActivity extends AppCompatActivity {
 
   private ViewPager viewPager;
   private long numOfProductsInTheCart = 0;
+  private List<Fragment> tabs;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.shopping_activity);
     setupActionBar();
+    createFragments();
     setupViewPager();
+  }
+
+  private void createFragments() {
+    tabs = new ArrayList<>();
+    tabs.add(new ElectronicsFragment());
+    tabs.add(new AccessoriesFragment());
   }
 
   @Override
@@ -92,7 +103,7 @@ public class ShoppingActivity extends AppCompatActivity {
     return new FragmentPagerAdapter(getSupportFragmentManager()) {
       @Override
       public Fragment getItem(int position) {
-        return new ProductsFragment();
+        return tabs.get(position);
       }
 
       @Override
