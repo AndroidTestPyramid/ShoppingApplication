@@ -2,12 +2,12 @@ package droidcon.shopping.presenter;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.Matchers;
+import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -24,6 +24,8 @@ import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.view.ProductResultsView;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -41,6 +43,7 @@ public class ProductResultsPresenterTest {
 
   @Before
   public void setup(){
+    MockitoAnnotations.initMocks(this);
     productResultsViewMock = mock(ProductResultsView.class);
     productsFetcherServiceMock = mock(ProductsFetcherService.class);
     stringResolver = mock(StringResolver.class);
@@ -49,8 +52,8 @@ public class ProductResultsPresenterTest {
     when(stringResolver.getString(R.string.technical_difficulty)).thenReturn("There is some technical difficulties");
   }
 
-  @Ignore("argumentCaptor is null dunno why")
-  public void shouldCreateProductDomain(){
+  @Test
+  public void shouldCreateProductViewModel(){
 
     doAnswer(new Answer() {
       @Override
@@ -70,7 +73,12 @@ public class ProductResultsPresenterTest {
 
     verify(productResultsViewMock).render(argumentCaptor.capture());
 
-    argumentCaptor.getValue();
+    final ArrayList<ProductViewModel> viewModels = argumentCaptor.getValue();
+
+    assertThat("SONY SMARTWATCH (BLACK)", is(viewModels.get(0).getTitle()));
+    assertThat("Sony watch desc", is(viewModels.get(0).getDescription()));
+    assertThat("http://xplorationstudio.com/sample_images/watch_2.jpeg", is(viewModels.get(0).getImageUrl()));
+    assertThat(1, is(viewModels.get(0).getProductId()));
   }
 
   @Test
