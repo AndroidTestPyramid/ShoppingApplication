@@ -1,6 +1,7 @@
 package droidcon.login.view;
 
 public interface LoginView {
+
   void showErrorOnInvalidEmail(int errorMessage);
 
   void showErrorOnInvalidPassword(int errorMessage);
