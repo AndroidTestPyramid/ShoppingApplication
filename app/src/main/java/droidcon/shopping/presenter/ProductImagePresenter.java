@@ -29,7 +29,7 @@ public class ProductImagePresenter {
     return new ResponseCallback<Bitmap>() {
       @Override
       public Bitmap deserialize(InputStream response) {
-        return ResponseDeserializerFactory.bitmapParser().deserialize(response);
+        return ResponseDeserializerFactory.bitmapDeserializer().deserialize(response);
       }
 
       @Override

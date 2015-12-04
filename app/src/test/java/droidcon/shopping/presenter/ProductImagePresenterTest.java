@@ -58,7 +58,7 @@ public class ProductImagePresenterTest {
     final ProductImageView productImageView = mock(ProductImageView.class);
     final ImageView imageView = mock(ImageView.class);
 
-    when(responseDeserializerFactory.bitmapParser()).thenReturn(responseDeserializer);
+    when(responseDeserializerFactory.bitmapDeserializer()).thenReturn(responseDeserializer);
 
     doAnswer(new Answer() {
       @Override

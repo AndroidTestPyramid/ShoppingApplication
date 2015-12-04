@@ -37,7 +37,7 @@ public class LoginPresenter {
     return new ResponseCallback<String>() {
       @Override
       public String deserialize(InputStream response) {
-        return ResponseDeserializerFactory.jsonParser().deserialize(response);
+        return ResponseDeserializerFactory.jsonStringDeserializer().deserialize(response);
       }
 
       @Override

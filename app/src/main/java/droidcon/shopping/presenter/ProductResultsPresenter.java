@@ -1,23 +1,20 @@
 package droidcon.shopping.presenter;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import droidcon.cart.R;
 import droidcon.service.ResponseCallback;
+import droidcon.service.ResponseDeserializer;
+import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
 import droidcon.shopping.service.ProductsFetcherService;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.view.ProductResultsView;
 import droidcon.shopping.viewmodel.ProductViewModel;
-
-import static droidcon.service.ResponseDeserializerFactory.jsonParser;
 
 public class ProductResultsPresenter {
   private final ProductResultsView productResultsView;
@@ -38,9 +35,10 @@ public class ProductResultsPresenter {
     return new ResponseCallback<ArrayList<Product>>() {
       @Override
       public ArrayList<Product> deserialize(InputStream response) {
-        Gson gson = new GsonBuilder().create();
-        Type listType = new TypeToken<ArrayList<Product>>() {}.getType();
-        return gson.fromJson(jsonParser().deserialize(response), listType);
+        final TypeToken<ArrayList<Product>> typeToken = new TypeToken<ArrayList<Product>>() {
+        };
+        ResponseDeserializer<ArrayList<Product>> objectResponseDeserializer = ResponseDeserializerFactory.objectDeserializer(typeToken.getType());
+        return objectResponseDeserializer.deserialize(response);
       }
 
       //TODO: To test view model creation - need a better approach
