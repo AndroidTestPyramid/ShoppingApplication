@@ -15,7 +15,7 @@ import java.util.List;
 
 import droidcon.cart.R;
 import droidcon.service.APIClient;
-import droidcon.shopping.presenter.ProductImagePresenter;
+import droidcon.shopping.presenter.ProductImageViewPresenter;
 import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.viewmodel.ProductViewModel;
@@ -79,9 +79,8 @@ public class ShoppingItemsListAdapter extends BaseAdapter implements ProductImag
     titleTextView.setText(product.getTitle());
   }
 
-  //TODO: look at removing imageView dependency
   private void fetchImage(View convertView, ProductViewModel product) {
-    new ProductImagePresenter(this, new ImageFetcher(new APIClient())).fetchImageFor((ImageView) convertView.findViewById(R.id.imageView), product.getImageUrl());
+    new ProductImageViewPresenter(this, new ImageFetcher(new APIClient())).fetchImageFor((ImageView) convertView.findViewById(R.id.imageView), product.getImageUrl());
   }
 
   private void renderProductCost(View convertView, ProductViewModel product) {

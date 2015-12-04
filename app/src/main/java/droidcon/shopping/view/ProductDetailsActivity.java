@@ -13,15 +13,14 @@ import android.widget.Toast;
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
-import droidcon.shopping.presenter.ProductImagePresenter;
+import droidcon.shopping.presenter.ProductDetailsPresenter;
 import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
 import static droidcon.shopping.view.ElectronicsFragment.PRODUCT_KEY;
 
-// TODO: Do we need another presenter?
-public class ProductDetailsActivity extends AppCompatActivity implements ProductImageView {
+public class ProductDetailsActivity extends AppCompatActivity implements ProductView {
 
   private ProductViewModel product;
   private StringResolver stringResolver;
@@ -76,7 +75,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
   }
 
   private void renderProductImage() {
-    new ProductImagePresenter(this, new ImageFetcher(new APIClient())).fetchImageFor((ImageView) findViewById(R.id.product_image), product.getImageUrl());
+    new ProductDetailsPresenter(this, new ImageFetcher(new APIClient())).fetchImageFor(product.getImageUrl());
   }
 
   private void renderProductCost() {
@@ -92,7 +91,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
   }
 
   @Override
-  public void renderImageFor(ImageView view, Bitmap response) {
-    view.setImageBitmap(response);
+  public void renderImageFor(Bitmap response) {
+    ImageView imageView = (ImageView) findViewById(R.id.product_image);
+    imageView.setImageBitmap(response);
   }
 }

@@ -54,7 +54,6 @@ public class ProductResultsPresenterTest {
 
   @Test
   public void shouldCreateProductViewModel(){
-
     doAnswer(new Answer() {
       @Override
       public Object answer(InvocationOnMock invocation) throws Throwable {
