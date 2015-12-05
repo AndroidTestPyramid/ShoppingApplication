@@ -13,17 +13,19 @@ import android.widget.Toast;
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
+import droidcon.shopping.presenter.ImagePresenter;
 import droidcon.shopping.presenter.ProductDetailsPresenter;
+import droidcon.shopping.presenter.ProductPresenter;
 import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
 import static droidcon.shopping.view.ElectronicsFragment.PRODUCT_KEY;
 
-public class ProductDetailsActivity extends AppCompatActivity implements ProductView {
+public class ProductDetailsActivity extends AppCompatActivity implements ProductDetailView, ProductView {
 
   private ProductViewModel product;
-  private StringResolver stringResolver;
+  private ProductDetailsPresenter productDetailsPresenter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +34,17 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
     final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     product = getIntent().getExtras().getParcelable(PRODUCT_KEY);
-    stringResolver = new StringResolver(this);
-    renderProductTitle();
-    renderProductDescription();
-    renderProductCost();
-    renderProductImage();
-    renderProductUpcomingDeal();
-    renderProductPopularityStatus();
+    final StringResolver stringResolver = new StringResolver(this);
+    productDetailsPresenter = new ProductDetailsPresenter(this, stringResolver);
+    ProductPresenter productPresenter = new ProductPresenter(this, stringResolver);
+    ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()));
+    imagePresenter.fetchImageFor(product.getImageUrl());
+    productPresenter.renderViewFor(product);
+    productDetailsPresenter.renderDetailedView(product);
   }
 
   public void addToCart(View view) {
-    Toast.makeText(this, R.string.addedToCart, Toast.LENGTH_SHORT).show();
-    final ProductInCart productInCart = new ProductInCart(product.getProductId());
-    productInCart.save();
+    productDetailsPresenter.saveProduct(new ProductInCart(product.getProductId()));
   }
 
   @Override
@@ -57,42 +57,48 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
     return super.onOptionsItemSelected(item);
   }
 
-  private void renderProductPopularityStatus() {
-    TextView popularityView = (TextView) findViewById(R.id.popularity);
-    popularityView.setText(product.getPopularityLabel(stringResolver));
-    popularityView.setTextColor(getResources().getColor(product.getPopularityTextColor()));
-    popularityView.setVisibility(product.getPopularityVisibilityStatus());
-  }
-
-  private void renderProductDescription() {
-    TextView issueDescription = (TextView) findViewById(R.id.product_description);
-    issueDescription.setText(product.getDescription());
-  }
-
-  private void renderProductTitle() {
-    TextView productTitle = (TextView) findViewById(R.id.product_title);
-    productTitle.setText(product.getTitle());
-  }
-
-  private void renderProductImage() {
-    new ProductDetailsPresenter(this, new ImageFetcher(new APIClient())).fetchImageFor(product.getImageUrl());
-  }
-
-  private void renderProductCost() {
-    TextView costTextView = (TextView) findViewById(R.id.cost);
-    costTextView.setText(product.getPrice(stringResolver));
-  }
-
-  private void renderProductUpcomingDeal() {
-    final LinearLayout upcomingDealView = (LinearLayout) findViewById(R.id.upcoming_deal);
-    upcomingDealView.setVisibility(product.getUpcomingDealVisibilityStatus());
-    TextView percentage = (TextView) findViewById(R.id.percentage);
-    percentage.setText(product.getUpcomingDeal(stringResolver));
+  @Override
+  public void renderProductPopularityStatus(String popularityLabel, int popularityTextColor, int popularityVisibilityStatus) {
+    final TextView popularityLabelTextView = (TextView) findViewById(R.id.popularity);
+    popularityLabelTextView.setText(popularityLabel);
+    popularityLabelTextView.setTextColor(getResources().getColor(popularityTextColor));
+    popularityLabelTextView.setVisibility(popularityVisibilityStatus);
   }
 
   @Override
-  public void renderImageFor(Bitmap response) {
-    ImageView imageView = (ImageView) findViewById(R.id.product_image);
+  public void renderProductUpcomingDeal(int upcomingDealVisibilityStatus, String upcomingDeal) {
+    final LinearLayout upcomingDealLayout = (LinearLayout) findViewById(R.id.upcoming_deal);
+    final TextView upcomingDealTextView = (TextView) findViewById(R.id.percentage);
+    upcomingDealLayout.setVisibility(upcomingDealVisibilityStatus);
+    upcomingDealTextView.setText(upcomingDeal);
+  }
+
+  @Override
+  public void renderProductTitle(String title) {
+    final TextView titleTextView = (TextView) findViewById(R.id.product_title);
+    titleTextView.setText(title);
+  }
+
+  @Override
+  public void renderProductCost(String price) {
+     TextView productCostTextView = (TextView) findViewById(R.id.cost);
+     productCostTextView.setText(price);
+  }
+
+  @Override
+  public void renderImage(Bitmap response) {
+    ImageView imageView = (ImageView) findViewById(R.id.imageView);
     imageView.setImageBitmap(response);
+  }
+
+  @Override
+  public void setDescription(String description) {
+    final TextView descriptionTextView = (TextView) findViewById(R.id.product_description);
+    descriptionTextView.setText(description);
+  }
+
+  @Override
+  public void showToastWithMessage(String message) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
   }
 }

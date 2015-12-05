@@ -17,7 +17,7 @@ public class ProductViewModelTest {
 
   private ProductViewModel productViewModel;
   private StringResolver stringResolver;
-  int price = 25;
+  private int price = 25;
   private String imageUrl = "";
   private int productId = 1;
   private String title = "watch";

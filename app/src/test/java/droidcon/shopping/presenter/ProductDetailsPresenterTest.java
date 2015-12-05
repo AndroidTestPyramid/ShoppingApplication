@@ -1,77 +1,56 @@
 package droidcon.shopping.presenter;
 
-import android.graphics.Bitmap;
-
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
+import droidcon.cart.R;
+import droidcon.cart.model.ProductInCart;
+import droidcon.shopping.model.Product;
+import droidcon.shopping.util.StringResolver;
+import droidcon.shopping.view.ProductDetailView;
+import droidcon.shopping.viewmodel.ProductViewModel;
 
-import droidcon.service.ResponseCallback;
-import droidcon.shopping.service.ImageFetcher;
-import droidcon.shopping.view.ProductView;
-
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ProductDetailsPresenterTest {
-
-  private ImageFetcher imageFetcher;
-  private Bitmap bitmap;
-  private ProductView productView;
+  private int price = 25;
+  private String imageUrl = "";
+  private int productId = 1;
+  private String title = "watch";
+  private String description = "watch_new";
+  private int upcomingDeal = 50;
+  private Boolean isNew = false;
+  private Boolean isPopular = false;
+  private ProductViewModel productViewModel;
+  private ProductDetailsPresenter productDetailsPresenter;
+  private ProductDetailView productDetailView;
 
   @Before
   public void setup(){
-    imageFetcher = mock(ImageFetcher.class);
-    bitmap = mock(Bitmap.class);
-    productView = mock(ProductView.class);
-  }
-  @Test
-  public void shouldInvokeRenderImageOnSuccessfullyFetchingImage(){
-
-
-    doAnswer(new Answer() {
-      @Override
-      public Object answer(InvocationOnMock invocation) throws Throwable {
-        final ResponseCallback callback = (ResponseCallback) invocation.getArguments()[1];
-        callback.onSuccess(bitmap);
-        return null;
-      }
-    }).when(imageFetcher).execute(eq(""), Matchers.<ResponseCallback<Bitmap>>any());
-
-    ProductDetailsPresenter productDetailsPresenter = new ProductDetailsPresenter(productView, imageFetcher);
-    productDetailsPresenter.fetchImageFor("");
-
-    verify(productView).renderImageFor(bitmap);
+    final Product product = new Product(productId, imageUrl, price, title, description, upcomingDeal, isNew, isPopular);
+    productViewModel = new ProductViewModel(product);
+    productDetailView = mock(ProductDetailView.class);
+    final StringResolver stringResolver = mock(StringResolver.class);
+    productDetailsPresenter = new ProductDetailsPresenter(productDetailView, stringResolver);
+    when(stringResolver.getString(R.string.addedToCart)).thenReturn("Item saved to cart");
   }
 
   @Test
-  public void shouldInvokeRenderImageSuccessfullyAfterDeserialization(){
-    final Bitmap[] bitmap = new Bitmap[1];
+  public void shouldInvokeSetDescriptionOnTheDetailsScreen(){
+    productDetailsPresenter.renderDetailedView(productViewModel);
 
-    doAnswer(new Answer() {
-      @Override
-      public Object answer(InvocationOnMock invocation) throws Throwable {
-        final ResponseCallback callback = (ResponseCallback) invocation.getArguments()[1];
-        final String fileToString = FileUtils.readFileToString(new File("src/test/resources/ic_launcher.png"));
-        final InputStream byteArrayInputStream = new ByteArrayInputStream(fileToString.getBytes());
-        bitmap[0] = (Bitmap) callback.deserialize(byteArrayInputStream);
-        callback.onSuccess(bitmap[0]);
-        return null;
-      }
-    }).when(imageFetcher).execute(eq(""), Matchers.<ResponseCallback<Bitmap>>any());
+    verify(productDetailView).setDescription("watch_new");
+  }
 
-    ProductDetailsPresenter productDetailsPresenter = new ProductDetailsPresenter(productView, imageFetcher);
-    productDetailsPresenter.fetchImageFor("");
+  @Test
+  public void shouldShowToastMessageOnSavingProductToDB(){
+    final ProductInCart productInCart = mock(ProductInCart.class);
 
-    verify(productView).renderImageFor(bitmap[0]);
+    productDetailsPresenter.saveProduct(productInCart);
+
+    verify(productInCart).save();
+    verify(productDetailView).showToastWithMessage("Item saved to cart");
   }
 }

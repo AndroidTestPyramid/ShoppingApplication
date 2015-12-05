@@ -13,16 +13,16 @@ import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
 import droidcon.shopping.service.ProductsFetcherService;
 import droidcon.shopping.util.StringResolver;
-import droidcon.shopping.view.ProductResultsView;
+import droidcon.shopping.view.ProductListView;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
-public class ProductResultsPresenter {
-  private final ProductResultsView productResultsView;
+public class ProductListPresenter {
+  private final ProductListView productListView;
   private final ProductsFetcherService productsFetcherService;
   private final StringResolver stringResolver;
 
-  public ProductResultsPresenter(ProductResultsView productResultsView, ProductsFetcherService productsFetcherService, StringResolver stringResolver) {
-    this.productResultsView = productResultsView;
+  public ProductListPresenter(ProductListView productListView, ProductsFetcherService productsFetcherService, StringResolver stringResolver) {
+    this.productListView = productListView;
     this.productsFetcherService = productsFetcherService;
     this.stringResolver = stringResolver;
   }
@@ -44,18 +44,18 @@ public class ProductResultsPresenter {
       //TODO: To test view model creation - need a better approach
       @Override
       public void onSuccess(ArrayList<Product> response) {
-        productResultsView.dismissLoader();
+        productListView.dismissLoader();
         final List<ProductViewModel> productViewModels = new ArrayList<>();
         for (Product product : response) {
           productViewModels.add(new ProductViewModel(product));
         }
-        productResultsView.render(productViewModels);
+        productListView.render(productViewModels);
       }
 
       @Override
       public void onError(Exception exception) {
-        productResultsView.dismissLoader();
-        productResultsView.showErrorDialog(stringResolver.getString(R.string.technical_difficulty));
+        productListView.dismissLoader();
+        productListView.showErrorDialog(stringResolver.getString(R.string.technical_difficulty));
       }
     };
   }

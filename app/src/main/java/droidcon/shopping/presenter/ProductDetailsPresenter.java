@@ -1,45 +1,28 @@
 package droidcon.shopping.presenter;
 
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-
-import java.io.InputStream;
-
-import droidcon.service.ResponseCallback;
-import droidcon.service.ResponseDeserializerFactory;
-import droidcon.shopping.service.ImageFetcher;
-import droidcon.shopping.view.ProductDetailsActivity;
-import droidcon.shopping.view.ProductImageView;
+import droidcon.cart.R;
+import droidcon.cart.model.ProductInCart;
+import droidcon.shopping.util.StringResolver;
+import droidcon.shopping.view.ProductDetailView;
 import droidcon.shopping.view.ProductView;
+import droidcon.shopping.viewmodel.ProductViewModel;
 
 public class ProductDetailsPresenter {
-  private final ProductView productView;
-  private final ImageFetcher imageFetcher;
 
-  public ProductDetailsPresenter(ProductView productView, ImageFetcher imageFetcher) {
-    this.productView = productView;
-    this.imageFetcher = imageFetcher;
+  private final ProductDetailView productDetailView;
+  private final StringResolver stringResolver;
+
+  public ProductDetailsPresenter(ProductDetailView productDetailView, StringResolver stringResolver) {
+    this.productDetailView = productDetailView;
+    this.stringResolver = stringResolver;
   }
 
-  public void fetchImageFor(String imageUrl) {
-    imageFetcher.execute(imageUrl, bitmapCallback());
+  public void renderDetailedView(ProductViewModel productViewModel) {
+    productDetailView.setDescription(productViewModel.getDescription());
   }
 
-  private ResponseCallback<Bitmap> bitmapCallback() {
-    return new ResponseCallback<Bitmap>() {
-      @Override
-      public Bitmap deserialize(InputStream response) {
-        return ResponseDeserializerFactory.bitmapDeserializer().deserialize(response);
-      }
-
-      @Override
-      public void onSuccess(Bitmap response) {
-        productView.renderImageFor(response);
-      }
-
-      @Override
-      public void onError(Exception exception) {
-      }
-    };
+  public void saveProduct(ProductInCart product) {
+    product.save();
+    productDetailView.showToastWithMessage(stringResolver.getString(R.string.addedToCart));
   }
 }

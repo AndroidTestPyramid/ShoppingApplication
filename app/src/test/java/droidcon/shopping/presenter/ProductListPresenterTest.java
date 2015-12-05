@@ -21,7 +21,7 @@ import droidcon.service.ResponseCallback;
 import droidcon.shopping.model.Product;
 import droidcon.shopping.service.ProductsFetcherService;
 import droidcon.shopping.util.StringResolver;
-import droidcon.shopping.view.ProductResultsView;
+import droidcon.shopping.view.ProductListView;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
 import static org.hamcrest.core.Is.is;
@@ -32,23 +32,23 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ProductResultsPresenterTest {
+public class ProductListPresenterTest {
 
   @Captor
   private ArgumentCaptor<ArrayList<ProductViewModel>> argumentCaptor;
-  private ProductResultsView productResultsViewMock;
+  private ProductListView productListViewMock;
   private ProductsFetcherService productsFetcherServiceMock;
-  private ProductResultsPresenter productResultsPresenter;
+  private ProductListPresenter productListPresenter;
   private StringResolver stringResolver;
 
   @Before
   public void setup(){
     MockitoAnnotations.initMocks(this);
-    productResultsViewMock = mock(ProductResultsView.class);
+    productListViewMock = mock(ProductListView.class);
     productsFetcherServiceMock = mock(ProductsFetcherService.class);
     stringResolver = mock(StringResolver.class);
 
-    productResultsPresenter = new ProductResultsPresenter(productResultsViewMock, productsFetcherServiceMock, stringResolver);
+    productListPresenter = new ProductListPresenter(productListViewMock, productsFetcherServiceMock, stringResolver);
     when(stringResolver.getString(R.string.technical_difficulty)).thenReturn("There is some technical difficulties");
   }
 
@@ -68,9 +68,9 @@ public class ProductResultsPresenterTest {
       }
     }).when(productsFetcherServiceMock).execute(Matchers.<ResponseCallback<ArrayList<Product>>>any());
 
-    productResultsPresenter.fetch();
+    productListPresenter.fetch();
 
-    verify(productResultsViewMock).render(argumentCaptor.capture());
+    verify(productListViewMock).render(argumentCaptor.capture());
 
     final ArrayList<ProductViewModel> viewModels = argumentCaptor.getValue();
 
@@ -91,11 +91,11 @@ public class ProductResultsPresenterTest {
       }
     }).when(productsFetcherServiceMock).execute((Matchers.<ResponseCallback<ArrayList<Product>>>any()));
 
-    productResultsPresenter.fetch();
+    productListPresenter.fetch();
 
-    InOrder inOrder = inOrder(productResultsViewMock);
-    inOrder.verify(productResultsViewMock).dismissLoader();
-    inOrder.verify(productResultsViewMock).showErrorDialog(stringResolver.getString(R.string.technical_difficulty));
+    InOrder inOrder = inOrder(productListViewMock);
+    inOrder.verify(productListViewMock).dismissLoader();
+    inOrder.verify(productListViewMock).showErrorDialog(stringResolver.getString(R.string.technical_difficulty));
   }
 
   @Test
@@ -109,10 +109,10 @@ public class ProductResultsPresenterTest {
       }
     }).when(productsFetcherServiceMock).execute((Matchers.<ResponseCallback<ArrayList<Product>>>any()));
 
-    productResultsPresenter.fetch();
+    productListPresenter.fetch();
 
-    InOrder inOrder = inOrder(productResultsViewMock);
-    inOrder.verify(productResultsViewMock).dismissLoader();
-    inOrder.verify(productResultsViewMock).render(new ArrayList<ProductViewModel>());
+    InOrder inOrder = inOrder(productListViewMock);
+    inOrder.verify(productListViewMock).dismissLoader();
+    inOrder.verify(productListViewMock).render(new ArrayList<ProductViewModel>());
   }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import droidcon.shopping.viewmodel.ProductViewModel;
 
-public interface ProductResultsView {
+public interface ProductListView {
   void render(List<ProductViewModel> products);
   void dismissLoader();
   void showErrorDialog(String string);

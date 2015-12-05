@@ -1,9 +1,9 @@
 package droidcon.shopping.presenter;
 
 import android.graphics.Bitmap;
-import android.widget.ImageView;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
@@ -15,22 +15,27 @@ import java.io.InputStream;
 
 import droidcon.service.ResponseCallback;
 import droidcon.shopping.service.ImageFetcher;
-import droidcon.shopping.view.ProductImageView;
+import droidcon.shopping.view.ProductView;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class ProductImageViewPresenterTest {
+public class ImagePresenterTest {
 
+  private ImageFetcher imageFetcher;
+  private Bitmap bitmap;
+  private ProductView productView;
+
+  @Before
+  public void setup(){
+    imageFetcher = mock(ImageFetcher.class);
+    bitmap = mock(Bitmap.class);
+    productView = mock(ProductView.class);
+  }
   @Test
   public void shouldInvokeRenderImageOnSuccessfullyFetchingImage(){
-    final ImageFetcher imageFetcher = mock(ImageFetcher.class);
-    final Bitmap bitmap = mock(Bitmap.class);
-    final ProductImageView productImageView = mock(ProductImageView.class);
-    final ImageView imageView = mock(ImageView.class);
-
     doAnswer(new Answer() {
       @Override
       public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -40,17 +45,14 @@ public class ProductImageViewPresenterTest {
       }
     }).when(imageFetcher).execute(eq(""), Matchers.<ResponseCallback<Bitmap>>any());
 
-    ProductImageViewPresenter productImageViewPresenter = new ProductImageViewPresenter(productImageView, imageFetcher);
-    productImageViewPresenter.fetchImageFor(imageView, "");
+    ImagePresenter productDetailsPresenter = new ImagePresenter(productView, imageFetcher);
+    productDetailsPresenter.fetchImageFor("");
 
-    verify(productImageView).renderImageFor(imageView, bitmap);
+    verify(productView).renderImage(bitmap);
   }
 
   @Test
   public void shouldInvokeRenderImageSuccessfullyAfterDeserialization(){
-    final ImageFetcher imageFetcher = mock(ImageFetcher.class);
-    final ProductImageView productImageView = mock(ProductImageView.class);
-    final ImageView imageView = mock(ImageView.class);
     final Bitmap[] bitmap = new Bitmap[1];
 
     doAnswer(new Answer() {
@@ -65,9 +67,9 @@ public class ProductImageViewPresenterTest {
       }
     }).when(imageFetcher).execute(eq(""), Matchers.<ResponseCallback<Bitmap>>any());
 
-    ProductImageViewPresenter productImageViewPresenter = new ProductImageViewPresenter(productImageView, imageFetcher);
-    productImageViewPresenter.fetchImageFor(imageView, "");
+    ImagePresenter productDetailsPresenter = new ImagePresenter(productView, imageFetcher);
+    productDetailsPresenter.fetchImageFor("");
 
-    verify(productImageView).renderImageFor(imageView, bitmap[0]);
+    verify(productView).renderImage(bitmap[0]);
   }
 }

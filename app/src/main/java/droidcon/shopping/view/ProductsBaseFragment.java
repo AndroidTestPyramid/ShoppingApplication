@@ -16,11 +16,9 @@ import android.widget.GridView;
 import java.util.List;
 
 import droidcon.cart.R;
-import droidcon.shopping.model.Product;
-import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
-public abstract class ProductsBaseFragment extends Fragment implements ProductResultsView {
+public abstract class ProductsBaseFragment extends Fragment implements ProductListView {
 
   public static final String PRODUCT_KEY = "droidcon.cart.current_product";
   private ProgressDialog progressDialog;
@@ -45,7 +43,7 @@ public abstract class ProductsBaseFragment extends Fragment implements ProductRe
 
   @Override
   public void render(final List<ProductViewModel> products) {
-    gridView.setAdapter(new ShoppingItemsListAdapter(products, getActivity()));
+    gridView.setAdapter(new ShoppingItemsAdapter(products, getActivity()));
 
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override

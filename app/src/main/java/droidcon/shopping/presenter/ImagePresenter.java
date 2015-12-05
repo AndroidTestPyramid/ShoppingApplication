@@ -1,30 +1,26 @@
 package droidcon.shopping.presenter;
 
 import android.graphics.Bitmap;
-import android.widget.ImageView;
-
 import java.io.InputStream;
-
 import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.service.ImageFetcher;
-import droidcon.shopping.view.ProductImageView;
+import droidcon.shopping.view.ProductView;
 
-public class ProductImageViewPresenter {
-
-  private final ProductImageView productImageView;
+public class ImagePresenter {
+  private final ProductView productView;
   private final ImageFetcher imageFetcher;
 
-  public ProductImageViewPresenter(ProductImageView productImageView, ImageFetcher imageFetcher) {
-    this.productImageView = productImageView;
+  public ImagePresenter(ProductView productView, ImageFetcher imageFetcher) {
+    this.productView = productView;
     this.imageFetcher = imageFetcher;
   }
 
-  public void fetchImageFor(ImageView imageView, String imageUrl) {
-    imageFetcher.execute(imageUrl, bitmapCallback(imageView));
+  public void fetchImageFor(String imageUrl) {
+    imageFetcher.execute(imageUrl, bitmapCallback());
   }
 
-  private ResponseCallback<Bitmap> bitmapCallback(final ImageView view) {
+  private ResponseCallback<Bitmap> bitmapCallback() {
     return new ResponseCallback<Bitmap>() {
       @Override
       public Bitmap deserialize(InputStream response) {
@@ -33,7 +29,7 @@ public class ProductImageViewPresenter {
 
       @Override
       public void onSuccess(Bitmap response) {
-        productImageView.renderImageFor(view, response);
+        productView.renderImage(response);
       }
 
       @Override
