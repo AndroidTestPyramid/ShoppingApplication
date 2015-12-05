@@ -20,7 +20,7 @@ import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
-import static droidcon.shopping.view.ElectronicsFragment.PRODUCT_KEY;
+import static droidcon.shopping.view.ProductsBaseFragment.PRODUCT_KEY;
 
 public class ProductDetailsActivity extends AppCompatActivity implements ProductDetailView, ProductView {
 
@@ -90,7 +90,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
 
   @Override
   public void renderImage(Bitmap response) {
-    ImageView imageView = (ImageView) findViewById(R.id.imageView);
+    ImageView imageView = (ImageView) findViewById(R.id.product_image);
     imageView.setImageBitmap(response);
   }
 
