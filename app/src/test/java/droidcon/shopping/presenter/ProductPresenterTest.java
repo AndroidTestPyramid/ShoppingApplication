@@ -5,8 +5,8 @@ import android.view.View;
 import org.junit.Test;
 
 import droidcon.cart.R;
+import droidcon.shopping.builder.ProductBuilder;
 import droidcon.shopping.model.Product;
-import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.view.ProductView;
 import droidcon.shopping.viewmodel.ProductViewModel;
@@ -17,14 +17,6 @@ import static org.mockito.Mockito.when;
 
 public class ProductPresenterTest {
 
-  private int price = 25;
-  private String imageUrl = "";
-  private int productId = 1;
-  private String title = "watch";
-  private String description = "watch_new";
-  private int upcomingDeal = 50;
-  private Boolean isNew = false;
-  private Boolean isPopular = false;
   private ProductViewModel productViewModel;
 
   @Test
@@ -35,7 +27,11 @@ public class ProductPresenterTest {
     when(stringResolver.getString(R.string.cost)).thenReturn("Rs. ");
     when(stringResolver.getString(R.string.percentage_sign)).thenReturn("%");
 
-    final Product product = new Product(productId, imageUrl, price, title, description, upcomingDeal, isNew, isPopular);
+    Product product = new ProductBuilder()
+        .withTitle("watch")
+        .withPrice(25)
+        .withUpcomingDeal(50).build();
+
     productViewModel = new ProductViewModel(product);
 
     final ProductPresenter productPresenter = new ProductPresenter(productView, stringResolver);

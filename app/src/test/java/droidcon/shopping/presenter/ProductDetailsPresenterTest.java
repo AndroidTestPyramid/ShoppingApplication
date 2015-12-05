@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
+import droidcon.shopping.builder.ProductBuilder;
 import droidcon.shopping.model.Product;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.view.ProductDetailView;
@@ -15,21 +16,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ProductDetailsPresenterTest {
-  private int price = 25;
-  private String imageUrl = "";
-  private int productId = 1;
-  private String title = "watch";
-  private String description = "watch_new";
-  private int upcomingDeal = 50;
-  private Boolean isNew = false;
-  private Boolean isPopular = false;
   private ProductViewModel productViewModel;
   private ProductDetailsPresenter productDetailsPresenter;
   private ProductDetailView productDetailView;
 
   @Before
   public void setup(){
-    final Product product = new Product(productId, imageUrl, price, title, description, upcomingDeal, isNew, isPopular);
+    Product product = new ProductBuilder()
+        .withDescription("watch_desc").build();
+
     productViewModel = new ProductViewModel(product);
     productDetailView = mock(ProductDetailView.class);
     final StringResolver stringResolver = mock(StringResolver.class);
@@ -41,7 +36,7 @@ public class ProductDetailsPresenterTest {
   public void shouldInvokeSetDescriptionOnTheDetailsScreen(){
     productDetailsPresenter.renderDetailedView(productViewModel);
 
-    verify(productDetailView).setDescription("watch_new");
+    verify(productDetailView).setDescription("watch_desc");
   }
 
   @Test

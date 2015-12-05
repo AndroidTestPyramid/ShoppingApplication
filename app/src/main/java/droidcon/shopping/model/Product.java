@@ -21,7 +21,6 @@ public class Product implements Parcelable {
   private final boolean isNew;
   private final boolean isPopular;
 
-  //TODO: For test, can I get rid of it ..maybe builder?
   public Product(int productId, String imageUrl, int price, String title, String description, int upcomingDeal, boolean isNew, boolean isPopular) {
     this.imageUrl = imageUrl;
     this.productId = productId;
