@@ -35,11 +35,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
     actionBar.setDisplayHomeAsUpEnabled(true);
     product = getIntent().getExtras().getParcelable(PRODUCT_KEY);
     final StringResolver stringResolver = new StringResolver(this);
-    productDetailsPresenter = new ProductDetailsPresenter(this, stringResolver);
-    ProductPresenter productPresenter = new ProductPresenter(this, stringResolver);
+
     ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()));
     imagePresenter.fetchImageFor(product.getImageUrl());
+
+    ProductPresenter productPresenter = new ProductPresenter(this, stringResolver);
     productPresenter.renderViewFor(product);
+
+    productDetailsPresenter = new ProductDetailsPresenter(this, stringResolver);
     productDetailsPresenter.renderDetailedView(product);
   }
 

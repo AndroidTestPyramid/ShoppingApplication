@@ -63,7 +63,9 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
     }
     ProductPresenter productPresenter = new ProductPresenter(this, new StringResolver(context));
     ProductViewModel product = products.get(position);
+
     productPresenter.renderViewFor(product);
+
     ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()));
     imagePresenter.fetchImageFor(product.getImageUrl());
     return convertView;

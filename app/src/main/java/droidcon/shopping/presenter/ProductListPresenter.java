@@ -41,7 +41,6 @@ public class ProductListPresenter {
         return objectResponseDeserializer.deserialize(response);
       }
 
-      //TODO: To test view model creation - need a better approach
       @Override
       public void onSuccess(ArrayList<Product> response) {
         productListView.dismissLoader();

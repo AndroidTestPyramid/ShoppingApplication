@@ -39,7 +39,7 @@ public class ProductViewModel implements Parcelable {
    return View.GONE;
   }
 
-  //TODO: Repeated - should move to constructor?
+  //TODO: Repeated - found it not so useful to use ENUM..still the if persists.
   public String getPopularityLabel(StringResolver stringResolver) {
     if (product.isPopular()) {
       return stringResolver.getString(R.string.popular);

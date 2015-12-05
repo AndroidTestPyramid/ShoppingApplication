@@ -45,6 +45,7 @@ public abstract class ProductsBaseFragment extends Fragment implements ProductLi
   public void render(final List<ProductViewModel> products) {
     gridView.setAdapter(new ShoppingItemsAdapter(products, getActivity()));
 
+    //TODO: Even if I pass products, getItem will give productViewModel only...cannot avoid passing view model
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
