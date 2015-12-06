@@ -69,7 +69,7 @@ public class ShoppingActivityTest {
         "http://xplorationstudio.com/sample_images/watch_2.jpeg", 2500,
         "SONY SMARTWATCH (BLACK)", "Taking the popular and coveted touch technology on wristwatches to a whole new level in terms of touch and tech, is this awe-inspiring smartwatch from Sony.",
         25, true, false));
-    
+
     intended(allOf(hasComponent(ProductDetailsActivity.class.getName()),
         hasExtra(ProductsBaseFragment.PRODUCT_KEY, productViewModel)));
   }
