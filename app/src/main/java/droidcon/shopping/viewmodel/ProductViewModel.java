@@ -11,6 +11,22 @@ import droidcon.shopping.util.StringResolver;
 public class ProductViewModel implements Parcelable {
   private final Product product;
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    ProductViewModel that = (ProductViewModel) o;
+
+    return product.equals(that.product);
+
+  }
+
+  @Override
+  public int hashCode() {
+    return product.hashCode();
+  }
+
   public ProductViewModel(Product product) {
     this.product = product;
   }
