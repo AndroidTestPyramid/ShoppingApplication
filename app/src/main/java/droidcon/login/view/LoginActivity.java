@@ -64,6 +64,7 @@ public class LoginActivity extends Activity implements LoginView {
     Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
     emailView.setText(null);
     passwordView.setText(null);
+    emailView.requestFocus();
   }
 
   @Override

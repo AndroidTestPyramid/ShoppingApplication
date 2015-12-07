@@ -6,12 +6,15 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import droidcon.login.service.EnvironmentManager;
 import droidcon.mockhttp.MockHTTPDispatcher;
 import droidcon.mockhttp.MockRequest;
 
 
 public class MockWebServerRule implements TestRule {
 
+  private static final String DOMAIN = "localhost";
+  private static final int PORT = 4568;
   private MockHTTPDispatcher mockHTTPDispatcher;
   private MockWebServer mockWebServer;
 
@@ -25,9 +28,13 @@ public class MockWebServerRule implements TestRule {
   }
 
   public MockRequest mockResponse(String path, String httpMethod, String response) {
-    MockRequest mockRequest = new MockRequest(path, httpMethod, response);
+    MockRequest mockRequest = new MockRequest(domain().concat(path), httpMethod, response);
     mockHTTPDispatcher.mock(mockRequest);
     return mockRequest;
+  }
+
+  private String domain() {
+    return String.format("http://%s:%s", DOMAIN, PORT);
   }
 
   private class MockHTTPServerStatement extends Statement {
@@ -40,9 +47,10 @@ public class MockWebServerRule implements TestRule {
 
     @Override
     public void evaluate() throws Throwable {
+      EnvironmentManager.getInstance().switchEnvironmentTo(domain());
       mockHTTPDispatcher = new MockHTTPDispatcher();
       mockWebServer.setDispatcher(mockHTTPDispatcher);
-      mockWebServer.start();
+      mockWebServer.start(PORT);
       try {
         this.base.evaluate();
       } finally {
