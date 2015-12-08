@@ -12,7 +12,7 @@ import static org.mockito.Mockito.verify;
 
 public class AccessoriesFetcherTest {
 
-  public static final String ACCESSORIES_URL = "http://xplorationstudio.com/sample_images/products.json";
+  public static final String ACCESSORIES_URL = "http://xplorationstudio.com/sample_images/droidcon_accessories.json";
 
   @Test
   public void shouldInvokeExecuteRequestWithAccessoriesUrl(){

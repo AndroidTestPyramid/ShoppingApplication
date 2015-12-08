@@ -37,7 +37,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
     final StringResolver stringResolver = new StringResolver(this);
 
     ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()));
-    imagePresenter.fetchImageFor(product.getImageUrl());
+    imagePresenter.fetchImageFor((ImageView) findViewById(R.id.product_image), product.getImageUrl());
 
     ProductPresenter productPresenter = new ProductPresenter(this, stringResolver);
     productPresenter.renderViewFor(product);
@@ -89,8 +89,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
   }
 
   @Override
-  public void renderImage(Bitmap response) {
-    ImageView imageView = (ImageView) findViewById(R.id.product_image);
+  public void renderImage(ImageView imageView, Bitmap response) {
     imageView.setImageBitmap(response);
   }
 

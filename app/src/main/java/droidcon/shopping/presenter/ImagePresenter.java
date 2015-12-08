@@ -1,6 +1,9 @@
 package droidcon.shopping.presenter;
 
 import android.graphics.Bitmap;
+import android.view.View;
+import android.widget.ImageView;
+
 import java.io.InputStream;
 import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseDeserializerFactory;
@@ -16,11 +19,11 @@ public class ImagePresenter {
     this.imageFetcher = imageFetcher;
   }
 
-  public void fetchImageFor(String imageUrl) {
-    imageFetcher.execute(imageUrl, bitmapCallback());
+  public void fetchImageFor(ImageView imageView, String imageUrl) {
+    imageFetcher.execute(imageUrl, bitmapCallback(imageView));
   }
 
-  private ResponseCallback<Bitmap> bitmapCallback() {
+  private ResponseCallback<Bitmap> bitmapCallback(final ImageView imageView) {
     return new ResponseCallback<Bitmap>() {
       @Override
       public Bitmap deserialize(InputStream response) {
@@ -29,7 +32,7 @@ public class ImagePresenter {
 
       @Override
       public void onSuccess(Bitmap response) {
-        productView.renderImage(response);
+        productView.renderImage(imageView, response);
       }
 
       @Override

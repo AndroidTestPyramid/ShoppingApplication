@@ -56,7 +56,6 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
       viewHolder.upcomingDealLayout = (LinearLayout) convertView.findViewById(R.id.upcoming_deal);
       viewHolder.productTitleTextView = (TextView) convertView.findViewById(R.id.title);
       viewHolder.productCostTextView = (TextView) convertView.findViewById(R.id.cost);
-      viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
       convertView.setTag(viewHolder);
     } else {
       viewHolder = (ViewHolderItem) convertView.getTag();
@@ -67,7 +66,7 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
     productPresenter.renderViewFor(product);
 
     ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()));
-    imagePresenter.fetchImageFor(product.getImageUrl());
+    imagePresenter.fetchImageFor((ImageView)convertView.findViewById(R.id.imageView), product.getImageUrl());
     return convertView;
   }
 
@@ -96,8 +95,8 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
   }
 
   @Override
-  public void renderImage(Bitmap response) {
-    viewHolder.imageView.setImageBitmap(response);
+  public void renderImage(ImageView imageView, Bitmap response) {
+    imageView.setImageBitmap(response);
   }
 
   static class ViewHolderItem {
@@ -106,6 +105,5 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
     TextView upcomingDeal;
     TextView productTitleTextView;
     TextView productCostTextView;
-    ImageView imageView;
   }
 }
