@@ -36,7 +36,11 @@ public abstract class ProductsBaseFragment extends Fragment implements ProductLi
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.products_layout, container, false);
-    progressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.loading), true, false);
+    progressDialog = new ProgressDialog(this.getActivity());
+    progressDialog.setMessage("Loading...");
+    progressDialog.setCancelable(false);
+    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    progressDialog.show();
     gridView = (GridView) view.findViewById(R.id.grid_view);
     return view;
   }

@@ -51,7 +51,11 @@ public class LoginActivity extends Activity implements LoginView {
 
   @Override
   public void showProgressDialog(int message) {
-    progressDialog = ProgressDialog.show(this, "", getString(message));
+    progressDialog = new ProgressDialog(this);
+    progressDialog.setMessage("Loading...");
+    progressDialog.setCancelable(false);
+    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    progressDialog.show();
   }
 
   @Override
