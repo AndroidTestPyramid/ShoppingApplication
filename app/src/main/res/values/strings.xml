@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">Shopping</string>
+  <string name="app_name">Gadget Stop</string>
   <string name="electronics">ELECTRONICS</string>
   <string name="accessories">ACCESSORIES</string>
   <string name="cart">Cart</string>
