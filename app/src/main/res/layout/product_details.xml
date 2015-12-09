@@ -12,6 +12,7 @@
         android:paddingRight="5dp"
         android:background="@color/white">
         <LinearLayout
+            android:id="@+id/product_details"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -102,22 +103,23 @@
     </ScrollView>
     <Button
         android:id="@+id/add_to_wishlist"
+        style="@style/GreenButtonSmallBoldText"
         android:layout_width="187dp"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/brown"
         android:paddingTop="5dp"
         android:text="@string/add_to_wishlist"/>
     <Button
+        android:id="@+id/add_to_cart"
+        style="@style/GreenButtonSmallBoldText"
         android:layout_width="180dp"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_toEndOf="@+id/add_to_wishlist"
         android:layout_toRightOf="@+id/add_to_wishlist"
-        android:background="@color/brown"
         android:onClick="addToCart"
-        android:paddingLeft="5dp"
         android:paddingTop="5dp"
+        android:layout_marginLeft="3dp"
         android:text="@string/buy"/>
 </RelativeLayout>

@@ -63,7 +63,7 @@ public class LoginActivity extends Activity {
   }
 
   private void checkLogin(String email, String password) {
-    new APIClient(RequestType.GET, getCallback()).execute(String.format(LOGIN_URL, email, password));
+    new APIClient().execute(RequestType.GET, String.format(LOGIN_URL, email, password), getCallback());
   }
 
   @NonNull
@@ -71,7 +71,7 @@ public class LoginActivity extends Activity {
     return new ResponseCallback<String>() {
       @Override
       public String deserialize(InputStream response) {
-        return ResponseDeserializerFactory.jsonParser().deserialize(response);
+        return ResponseDeserializerFactory.jsonStringDeserializer().deserialize(response);
       }
 
       @Override

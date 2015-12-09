@@ -13,24 +13,21 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import droidcon.cart.R;
 import droidcon.service.APIClient;
 import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
+import droidcon.service.ResponseDeserializer;
 import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
 
-public class ProductsFragment extends Fragment {
+public abstract class ProductsBaseFragment extends Fragment {
 
-  public static final String PRODUCTS_URL = "http://xplorationstudio.com/sample_images/products.json";
   public static final String PRODUCT_KEY = "droidcon.cart.current_product";
   private ProgressDialog progressDialog;
   private GridView gridView;
@@ -51,17 +48,19 @@ public class ProductsFragment extends Fragment {
   }
 
   private void fetchProducts() {
-    new APIClient(RequestType.GET, productsCallback()).execute(PRODUCTS_URL);
+    new APIClient().execute(RequestType.GET, getURL(), productsCallback());
   }
+
+  abstract public String getURL();
 
   private ResponseCallback<ArrayList<Product>> productsCallback() {
     return new ResponseCallback<ArrayList<Product>>() {
       @Override
       public ArrayList<Product> deserialize(InputStream response) {
-        Gson gson = new GsonBuilder().create();
-        Type listType = new TypeToken<ArrayList<Product>>() {}.getType();
-        ArrayList<Product> products = gson.fromJson(ResponseDeserializerFactory.jsonParser().deserialize(response), listType);
-        return products;
+        final TypeToken<ArrayList<Product>> typeToken = new TypeToken<ArrayList<Product>>() {
+        };
+        ResponseDeserializer<ArrayList<Product>> objectResponseDeserializer = ResponseDeserializerFactory.objectDeserializer(typeToken.getType());
+        return objectResponseDeserializer.deserialize(response);
       }
 
       @Override

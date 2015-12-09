@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.InputStream;
+
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
@@ -17,8 +19,9 @@ import droidcon.service.APIClient.RequestType;
 import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
+import droidcon.shopping.util.ImageCache;
 
-import static droidcon.shopping.view.ProductsFragment.PRODUCT_KEY;
+import static droidcon.shopping.view.ProductsBaseFragment.PRODUCT_KEY;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
@@ -61,7 +64,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     TextView popularityView = (TextView)findViewById(R.id.popularity);
     if(product.isNew()){
       popularity = getString(R.string.product_new);
-      textColor = R.color.green;
+      textColor = R.color.red;
     }
     if(product.isPopular()){
       popularity = getString(R.string.popular);
@@ -85,8 +88,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
   }
 
   private void renderProductImage() {
-    APIClient apiClient = new APIClient(RequestType.GET, bitmapCallback((ImageView) findViewById(R.id.product_image)));
-    apiClient.execute(product.getImageUrl());
+    APIClient apiClient = new APIClient();
+    final ImageView imageView = (ImageView) findViewById(R.id.product_image);
+    final Bitmap image = new ImageCache(this).getImageFor(product.getImageUrl());
+    if (image != null) {
+      imageView.setImageBitmap(image);
+    } else {
+      apiClient.execute(RequestType.GET, product.getImageUrl(), bitmapCallback(imageView));
+    }
   }
 
   private void renderProductCost() {
@@ -107,11 +116,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
     return new ResponseCallback<Bitmap>() {
       @Override
       public Bitmap deserialize(InputStream response) {
-        return ResponseDeserializerFactory.bitmapParser().deserialize(response);
+        return ResponseDeserializerFactory.bitmapDeserializer().deserialize(response);
       }
 
       @Override
       public void onSuccess(Bitmap response) {
+        new ImageCache(ProductDetailsActivity.this).save(product.getImageUrl(), response);
         imageView.setImageBitmap(response);
       }
 
