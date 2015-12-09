@@ -1,5 +1,8 @@
 package droidcon.shopping.presenter;
 
+import android.content.res.Resources;
+import android.view.View;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,35 +10,40 @@ import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.shopping.builder.ProductBuilder;
 import droidcon.shopping.model.Product;
-import droidcon.shopping.util.StringResolver;
+import droidcon.shopping.repository.ImageRepository;
+import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.view.ProductDetailView;
-import droidcon.shopping.viewmodel.ProductViewModel;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ProductDetailsPresenterTest {
-  private ProductViewModel productViewModel;
   private ProductDetailsPresenter productDetailsPresenter;
   private ProductDetailView productDetailView;
 
   @Before
   public void setup(){
     Product product = new ProductBuilder()
+        .withPrice(25)
+        .withTitle("watch")
+        .withUpcomingDeal(50)
         .withDescription("watch_desc").build();
 
-    productViewModel = new ProductViewModel(product);
+    final Resources resources = mock(Resources.class);
+    when(resources.getString(R.string.cost)).thenReturn("Rs. ");
+    when(resources.getString(R.string.percentage_sign)).thenReturn("%");
+
     productDetailView = mock(ProductDetailView.class);
-    final StringResolver stringResolver = mock(StringResolver.class);
-    productDetailsPresenter = new ProductDetailsPresenter(productDetailView, stringResolver);
-    when(stringResolver.getString(R.string.addedToCart)).thenReturn("Item saved to cart");
+    final ProductPresenter productPresenter = mock(ProductPresenter.class);
+
+    productDetailsPresenter = new ProductDetailsPresenter(productDetailView, product, resources, productPresenter);
+    when(resources.getString(R.string.addedToCart)).thenReturn("Item saved to cart");
+    productDetailsPresenter.renderDetailedView();
   }
 
   @Test
   public void shouldInvokeSetDescriptionOnTheDetailsScreen(){
-    productDetailsPresenter.renderDetailedView(productViewModel);
-
     verify(productDetailView).setDescription("watch_desc");
   }
 

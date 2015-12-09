@@ -15,31 +15,33 @@ import java.util.List;
 
 import droidcon.cart.R;
 import droidcon.service.APIClient;
+import droidcon.shopping.model.Product;
 import droidcon.shopping.presenter.ImagePresenter;
 import droidcon.shopping.presenter.ProductPresenter;
 import droidcon.shopping.repository.ImageRepository;
 import droidcon.shopping.service.ImageFetcher;
-import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
 public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
-  public List<ProductViewModel> products = new ArrayList<>();
+  public List<ProductViewModel> productViewModels = new ArrayList<>();
+  private final List<Product> products;
   private Context context;
   private ViewHolderItem viewHolder;
 
-  public ShoppingItemsAdapter(List<ProductViewModel> products, Context context) {
+  public ShoppingItemsAdapter(List<ProductViewModel> productViewModels, List<Product> products, Context context) {
+    this.productViewModels = productViewModels;
     this.products = products;
     this.context = context;
   }
 
   @Override
   public int getCount() {
-    return products.size();
+    return productViewModels.size();
   }
 
   @Override
   public Object getItem(int position) {
-    return products.get(position);
+    return productViewModels.get(position);
   }
 
   @Override
@@ -61,13 +63,14 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
     } else {
       viewHolder = (ViewHolderItem) convertView.getTag();
     }
-    ProductPresenter productPresenter = new ProductPresenter(this, new StringResolver(context));
-    ProductViewModel product = products.get(position);
+    final ImageFetcher imageFetcher = new ImageFetcher(new APIClient());
+    final ImageRepository imageRepository = new ImageRepository(context);
 
-    productPresenter.renderViewFor(product);
+    ProductPresenter productPresenter = new ProductPresenter(this, products.get(position), new ImagePresenter(this, imageFetcher, imageRepository), context.getResources());
 
-    ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()), new ImageRepository(context));
-    imagePresenter.fetchImageFor((ImageView)convertView.findViewById(R.id.imageView), product.getImageUrl());
+    productPresenter.renderView();
+    productPresenter.renderImageFor((ImageView) convertView.findViewById(R.id.imageView));
+
     return convertView;
   }
 
@@ -98,6 +101,10 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
   @Override
   public void renderImage(ImageView imageView, Bitmap response) {
     imageView.setImageBitmap(response);
+  }
+
+  public Product getProductAt(int position) {
+    return products.get(position);
   }
 
   static class ViewHolderItem {

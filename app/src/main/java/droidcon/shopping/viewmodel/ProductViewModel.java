@@ -1,34 +1,18 @@
 package droidcon.shopping.viewmodel;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.content.res.Resources;
 import android.view.View;
 
 import droidcon.cart.R;
 import droidcon.shopping.model.Product;
-import droidcon.shopping.util.StringResolver;
 
-public class ProductViewModel implements Parcelable {
+public class ProductViewModel {
   private final Product product;
+  private final Resources resources;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    ProductViewModel that = (ProductViewModel) o;
-
-    return product.equals(that.product);
-
-  }
-
-  @Override
-  public int hashCode() {
-    return product.hashCode();
-  }
-
-  public ProductViewModel(Product product) {
+  public ProductViewModel(Product product, Resources resources) {
     this.product = product;
+    this.resources = resources;
   }
 
   public String getTitle() {
@@ -39,35 +23,35 @@ public class ProductViewModel implements Parcelable {
     return product.getImageUrl();
   }
 
-  public String getPrice(StringResolver stringResolver) {
-    return String.format("%s%d", stringResolver.getString(R.string.cost), product.getPrice());
+  public String getPrice() {
+    return String.format("%s%d", resources.getString(R.string.cost), product.getPrice());
   }
 
-  public String getUpcomingDeal(StringResolver stringResolver) {
-    if(anyUpcomingDeal())
-     return String.format("%d%s", product.getUpcomingDeal(), stringResolver.getString(R.string.percentage_sign));
+  public String getUpcomingDeal() {
+    if (anyUpcomingDeal())
+      return String.format("%d%s", product.getUpcomingDeal(), resources.getString(R.string.percentage_sign));
     return "";
   }
 
   public int getUpcomingDealVisibilityStatus() {
-   if(anyUpcomingDeal())
-     return View.VISIBLE;
-   return View.GONE;
+    if (anyUpcomingDeal())
+      return View.VISIBLE;
+    return View.GONE;
   }
 
   //TODO: Repeated - found it not so useful to use ENUM..still the if persists.
-  public String getPopularityLabel(StringResolver stringResolver) {
+  public String getPopularityLabel() {
     if (product.isPopular()) {
-      return stringResolver.getString(R.string.popular);
+      return resources.getString(R.string.popular);
     }
     if (product.isNew()) {
-      return stringResolver.getString(R.string.product_new);
+      return resources.getString(R.string.product_new);
     }
     return "";
   }
 
   public int getPopularityVisibilityStatus() {
-    if(product.isNew() || product.isPopular()){
+    if (product.isNew() || product.isPopular()) {
       return View.VISIBLE;
     }
     return View.GONE;
@@ -86,7 +70,7 @@ public class ProductViewModel implements Parcelable {
       return R.color.purple;
     }
     if (product.isNew()) {
-      return R.color.green;
+      return R.color.red;
     }
     return R.color.white;
   }
@@ -96,28 +80,19 @@ public class ProductViewModel implements Parcelable {
   }
 
   @Override
-  public int describeContents() {
-    return 0;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    ProductViewModel that = (ProductViewModel) o;
+
+    return product.equals(that.product);
+
   }
 
   @Override
-  public void writeToParcel(Parcel parcel, int flags) {
-    parcel.writeParcelable(product, flags);
+  public int hashCode() {
+    return product.hashCode();
   }
 
-  protected ProductViewModel(Parcel in) {
-    product = in.readParcelable(Product.class.getClassLoader());
-  }
-
-  public static final Creator<ProductViewModel> CREATOR = new Creator<ProductViewModel>() {
-    @Override
-    public ProductViewModel createFromParcel(Parcel in) {
-      return new ProductViewModel(in);
-    }
-
-    @Override
-    public ProductViewModel[] newArray(int size) {
-      return new ProductViewModel[size];
-    }
-  };
 }

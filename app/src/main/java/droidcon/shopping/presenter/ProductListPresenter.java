@@ -1,5 +1,7 @@
 package droidcon.shopping.presenter;
 
+import android.content.res.Resources;
+
 import com.google.gson.reflect.TypeToken;
 
 import java.io.InputStream;
@@ -12,19 +14,18 @@ import droidcon.service.ResponseDeserializer;
 import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
 import droidcon.shopping.service.ProductsFetcherService;
-import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.view.ProductListView;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
 public class ProductListPresenter {
   private final ProductListView productListView;
   private final ProductsFetcherService productsFetcherService;
-  private final StringResolver stringResolver;
+  private final Resources resources;
 
-  public ProductListPresenter(ProductListView productListView, ProductsFetcherService productsFetcherService, StringResolver stringResolver) {
+  public ProductListPresenter(ProductListView productListView, ProductsFetcherService productsFetcherService, Resources resources) {
     this.productListView = productListView;
     this.productsFetcherService = productsFetcherService;
-    this.stringResolver = stringResolver;
+    this.resources = resources;
   }
 
   public void fetch() {
@@ -46,15 +47,15 @@ public class ProductListPresenter {
         productListView.dismissLoader();
         final List<ProductViewModel> productViewModels = new ArrayList<>();
         for (Product product : response) {
-          productViewModels.add(new ProductViewModel(product));
+          productViewModels.add(new ProductViewModel(product, resources));
         }
-        productListView.render(productViewModels);
+        productListView.render(response, productViewModels);
       }
 
       @Override
       public void onError(Exception exception) {
         productListView.dismissLoader();
-        productListView.showErrorDialog(stringResolver.getString(R.string.technical_difficulty));
+        productListView.showErrorDialog(resources.getString(R.string.technical_difficulty));
       }
     };
   }

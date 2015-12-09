@@ -1,5 +1,6 @@
 package droidcon.shopping.viewmodel;
 
+import android.content.res.Resources;
 import android.view.View;
 
 import org.junit.Before;
@@ -8,7 +9,6 @@ import org.junit.Test;
 import droidcon.cart.R;
 import droidcon.shopping.builder.ProductBuilder;
 import droidcon.shopping.model.Product;
-import droidcon.shopping.util.StringResolver;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -17,32 +17,31 @@ import static org.mockito.Mockito.when;
 public class ProductViewModelTest {
 
   private ProductViewModel productViewModel;
-  private StringResolver stringResolver;
+  private Resources resources;
 
   @Before
   public void setup(){
-    stringResolver = mock(StringResolver.class);
-    when(stringResolver.getString(R.string.cost)).thenReturn("Rs. ");
-    when(stringResolver.getString(R.string.percentage_sign)).thenReturn("%");
-    when(stringResolver.getString(R.string.product_new)).thenReturn("New");
-    when(stringResolver.getString(R.string.popular)).thenReturn("Popular");
+    resources = mock(Resources.class);
+    when(resources.getString(R.string.cost)).thenReturn("Rs. ");
+    when(resources.getString(R.string.percentage_sign)).thenReturn("%");
+    when(resources.getString(R.string.product_new)).thenReturn("New");
+    when(resources.getString(R.string.popular)).thenReturn("Popular");
 
     Product product = new ProductBuilder()
         .withPrice(25)
         .withUpcomingDeal(50).build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
   }
 
   @Test
   public void shouldGetMassagedPrice(){
-
-    assertEquals(productViewModel.getPrice(stringResolver), "Rs. 25");
+    assertEquals("Rs. 25", productViewModel.getPrice());
   }
 
   @Test
   public void shouldGetMassagedUpcomingDeal(){
-    assertEquals(productViewModel.getUpcomingDeal(stringResolver), "50%");
+    assertEquals("50%", productViewModel.getUpcomingDeal());
   }
 
   @Test
@@ -50,14 +49,14 @@ public class ProductViewModelTest {
     Product product = new ProductBuilder()
         .withUpcomingDeal(0).build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getUpcomingDeal(stringResolver), "");
+    assertEquals("", productViewModel.getUpcomingDeal());
   }
 
   @Test
   public void upcomingDealShouldBeVisible(){
-    assertEquals(productViewModel.getUpcomingDealVisibilityStatus(), View.VISIBLE);
+    assertEquals(View.VISIBLE, productViewModel.getUpcomingDealVisibilityStatus());
   }
 
   @Test
@@ -65,9 +64,9 @@ public class ProductViewModelTest {
     Product product = new ProductBuilder()
         .withUpcomingDeal(0).build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getUpcomingDealVisibilityStatus(), View.GONE);
+    assertEquals(View.GONE, productViewModel.getUpcomingDealVisibilityStatus());
   }
 
   @Test
@@ -75,9 +74,9 @@ public class ProductViewModelTest {
     Product product = new ProductBuilder()
         .withIsNew().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getPopularityLabel(stringResolver), "New");
+    assertEquals("New", productViewModel.getPopularityLabel());
   }
 
   @Test
@@ -86,9 +85,9 @@ public class ProductViewModelTest {
         .withIsPopular()
         .withIsNew().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getPopularityLabel(stringResolver), "Popular");
+    assertEquals("Popular", productViewModel.getPopularityLabel());
   }
 
   @Test
@@ -96,9 +95,9 @@ public class ProductViewModelTest {
     Product product = new ProductBuilder()
         .withIsPopular().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product,resources);
 
-    assertEquals(productViewModel.getPopularityLabel(stringResolver), "Popular");
+    assertEquals("Popular", productViewModel.getPopularityLabel());
   }
 
   @Test
@@ -107,9 +106,9 @@ public class ProductViewModelTest {
         .withIsPopular()
         .withIsNew().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getPopularityVisibilityStatus(), View.VISIBLE);
+    assertEquals(View.VISIBLE, productViewModel.getPopularityVisibilityStatus());
   }
 
   @Test
@@ -117,9 +116,9 @@ public class ProductViewModelTest {
     Product product = new ProductBuilder()
         .withIsNew().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getPopularityVisibilityStatus(), View.VISIBLE);
+    assertEquals(View.VISIBLE, productViewModel.getPopularityVisibilityStatus());
   }
 
   @Test
@@ -127,9 +126,9 @@ public class ProductViewModelTest {
     Product product = new ProductBuilder()
         .withIsPopular().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getPopularityVisibilityStatus(), View.VISIBLE);
+    assertEquals(View.VISIBLE, productViewModel.getPopularityVisibilityStatus());
   }
 
   @Test
@@ -137,9 +136,9 @@ public class ProductViewModelTest {
     Product product = new ProductBuilder()
         .withIsNew().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getPopularityTextColor(), R.color.green);
+    assertEquals(R.color.red, productViewModel.getPopularityTextColor());
   }
 
   @Test
@@ -148,9 +147,9 @@ public class ProductViewModelTest {
         .withIsPopular()
         .withIsNew().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getPopularityTextColor(), R.color.purple);
+    assertEquals(R.color.purple, productViewModel.getPopularityTextColor());
   }
 
   @Test
@@ -158,8 +157,8 @@ public class ProductViewModelTest {
     Product product = new ProductBuilder()
         .withIsPopular().build();
 
-    productViewModel = new ProductViewModel(product);
+    productViewModel = new ProductViewModel(product, resources);
 
-    assertEquals(productViewModel.getPopularityTextColor(), R.color.purple);
+    assertEquals(R.color.purple, productViewModel.getPopularityTextColor());
   }
 }

@@ -1,5 +1,7 @@
 package droidcon.shopping.presenter;
 
+import android.content.res.Resources;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +22,6 @@ import droidcon.cart.R;
 import droidcon.service.ResponseCallback;
 import droidcon.shopping.model.Product;
 import droidcon.shopping.service.ProductsFetcherService;
-import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.view.ProductListView;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
@@ -35,21 +36,24 @@ import static org.mockito.Mockito.when;
 public class ProductListPresenterTest {
 
   @Captor
-  private ArgumentCaptor<ArrayList<ProductViewModel>> argumentCaptor;
+  private ArgumentCaptor<ArrayList<ProductViewModel>> productViewModelArgumentCaptor;
+
+  @Captor
+  private ArgumentCaptor<ArrayList<Product>> productArgumentCaptor;
   private ProductListView productListViewMock;
   private ProductsFetcherService productsFetcherServiceMock;
   private ProductListPresenter productListPresenter;
-  private StringResolver stringResolver;
+  private Resources resources;
 
   @Before
   public void setup(){
     MockitoAnnotations.initMocks(this);
     productListViewMock = mock(ProductListView.class);
     productsFetcherServiceMock = mock(ProductsFetcherService.class);
-    stringResolver = mock(StringResolver.class);
+    resources = mock(Resources.class);
 
-    productListPresenter = new ProductListPresenter(productListViewMock, productsFetcherServiceMock, stringResolver);
-    when(stringResolver.getString(R.string.technical_difficulty)).thenReturn("There is some technical difficulties");
+    productListPresenter = new ProductListPresenter(productListViewMock, productsFetcherServiceMock, resources);
+    when(resources.getString(R.string.technical_difficulty)).thenReturn("There is some technical difficulties");
   }
 
   @Test
@@ -70,14 +74,20 @@ public class ProductListPresenterTest {
 
     productListPresenter.fetch();
 
-    verify(productListViewMock).render(argumentCaptor.capture());
+    verify(productListViewMock).render(productArgumentCaptor.capture(), productViewModelArgumentCaptor.capture());
 
-    final ArrayList<ProductViewModel> viewModels = argumentCaptor.getValue();
+    final ArrayList<Product> products = productArgumentCaptor.getValue();
+
+    assertThat("SONY SMARTWATCH (BLACK)", is(products.get(0).getTitle()));
+    assertThat("Sony watch desc", is(products.get(0).getDescription()));
+    assertThat("http://xplorationstudio.com/sample_images/watch_2.jpeg", is(products.get(0).getImageUrl()));
+    assertThat(1, is(products.get(0).getProductId()));
+
+
+    final ArrayList<ProductViewModel> viewModels = productViewModelArgumentCaptor.getValue();
 
     assertThat("SONY SMARTWATCH (BLACK)", is(viewModels.get(0).getTitle()));
     assertThat("Sony watch desc", is(viewModels.get(0).getDescription()));
-    assertThat("http://xplorationstudio.com/sample_images/watch_2.jpeg", is(viewModels.get(0).getImageUrl()));
-    assertThat(1, is(viewModels.get(0).getProductId()));
   }
 
   @Test
@@ -95,7 +105,7 @@ public class ProductListPresenterTest {
 
     InOrder inOrder = inOrder(productListViewMock);
     inOrder.verify(productListViewMock).dismissLoader();
-    inOrder.verify(productListViewMock).showErrorDialog(stringResolver.getString(R.string.technical_difficulty));
+    inOrder.verify(productListViewMock).showErrorDialog(resources.getString(R.string.technical_difficulty));
   }
 
   @Test
@@ -113,6 +123,6 @@ public class ProductListPresenterTest {
 
     InOrder inOrder = inOrder(productListViewMock);
     inOrder.verify(productListViewMock).dismissLoader();
-    inOrder.verify(productListViewMock).render(new ArrayList<ProductViewModel>());
+    inOrder.verify(productListViewMock).render(Matchers.anyListOf(Product.class), Matchers.anyListOf(ProductViewModel.class));
   }
 }

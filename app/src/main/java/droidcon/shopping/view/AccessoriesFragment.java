@@ -8,6 +8,6 @@ import droidcon.shopping.util.StringResolver;
 public class AccessoriesFragment extends ProductsBaseFragment implements ProductListView {
 
   public void fetchProducts() {
-    new ProductListPresenter(this, new AccessoriesFetcher(new APIClient()), new StringResolver(getActivity())).fetch();
+    new ProductListPresenter(this, new AccessoriesFetcher(new APIClient()), getResources()).fetch();
   }
 }

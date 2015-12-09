@@ -13,19 +13,18 @@ import android.widget.Toast;
 import droidcon.cart.R;
 import droidcon.cart.model.ProductInCart;
 import droidcon.service.APIClient;
+import droidcon.shopping.model.Product;
 import droidcon.shopping.presenter.ImagePresenter;
 import droidcon.shopping.presenter.ProductDetailsPresenter;
 import droidcon.shopping.presenter.ProductPresenter;
 import droidcon.shopping.repository.ImageRepository;
 import droidcon.shopping.service.ImageFetcher;
-import droidcon.shopping.util.StringResolver;
-import droidcon.shopping.viewmodel.ProductViewModel;
 
 import static droidcon.shopping.view.ProductsBaseFragment.PRODUCT_KEY;
 
-public class ProductDetailsActivity extends AppCompatActivity implements ProductDetailView, ProductView {
+public class ProductDetailsActivity extends AppCompatActivity implements ProductDetailView {
 
-  private ProductViewModel product;
+  private Product product;
   private ProductDetailsPresenter productDetailsPresenter;
 
   @Override
@@ -35,16 +34,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
     final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     product = getIntent().getExtras().getParcelable(PRODUCT_KEY);
-    final StringResolver stringResolver = new StringResolver(this);
 
-    ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()), new ImageRepository(this));
-    imagePresenter.fetchImageFor((ImageView) findViewById(R.id.product_image), product.getImageUrl());
+    final ImageFetcher imageFetcher = new ImageFetcher(new APIClient());
+    final ImageRepository imageRepository = new ImageRepository(this);
 
-    ProductPresenter productPresenter = new ProductPresenter(this, stringResolver);
-    productPresenter.renderViewFor(product);
+    final ProductPresenter productPresenter = new ProductPresenter(this, product, new ImagePresenter(this, imageFetcher, imageRepository), getResources());
 
-    productDetailsPresenter = new ProductDetailsPresenter(this, stringResolver);
-    productDetailsPresenter.renderDetailedView(product);
+    productDetailsPresenter = new ProductDetailsPresenter(this, product, getResources(), productPresenter);
+
+    productDetailsPresenter.renderDetailedView();
+    productDetailsPresenter.renderImageFor((ImageView) findViewById(R.id.product_image));
   }
 
   public void addToCart(View view) {
@@ -85,8 +84,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
 
   @Override
   public void renderProductCost(String price) {
-     TextView productCostTextView = (TextView) findViewById(R.id.cost);
-     productCostTextView.setText(price);
+    TextView productCostTextView = (TextView) findViewById(R.id.cost);
+    productCostTextView.setText(price);
   }
 
   @Override

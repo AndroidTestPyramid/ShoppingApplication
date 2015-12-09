@@ -13,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import droidcon.cart.R;
+import droidcon.shopping.model.Product;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
 public abstract class ProductsBaseFragment extends Fragment implements ProductListView {
@@ -46,14 +48,15 @@ public abstract class ProductsBaseFragment extends Fragment implements ProductLi
   }
 
   @Override
-  public void render(final List<ProductViewModel> products) {
-    gridView.setAdapter(new ShoppingItemsAdapter(products, getActivity()));
+  public void render(List<Product> products, final List<ProductViewModel> productViewModels) {
+    final ShoppingItemsAdapter shoppingItemsAdapter = new ShoppingItemsAdapter(productViewModels, products, getActivity());
+    gridView.setAdapter(shoppingItemsAdapter);
 
-    //TODO: Even if I pass products, getItem will give productViewModel only...cannot avoid passing view model
+    //TODO: Even if I pass productViewModels, getItem will give productViewModel only...cannot avoid passing view model
     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        ProductViewModel product = (ProductViewModel) adapterView.getAdapter().getItem(position);
+        Product product = shoppingItemsAdapter.getProductAt(position);
         Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
         intent.putExtra(PRODUCT_KEY, product);
         startActivity(intent);

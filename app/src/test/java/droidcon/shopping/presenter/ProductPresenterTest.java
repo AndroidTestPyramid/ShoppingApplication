@@ -1,5 +1,6 @@
 package droidcon.shopping.presenter;
 
+import android.content.res.Resources;
 import android.view.View;
 
 import org.junit.Test;
@@ -7,7 +8,8 @@ import org.junit.Test;
 import droidcon.cart.R;
 import droidcon.shopping.builder.ProductBuilder;
 import droidcon.shopping.model.Product;
-import droidcon.shopping.util.StringResolver;
+import droidcon.shopping.repository.ImageRepository;
+import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.view.ProductView;
 import droidcon.shopping.viewmodel.ProductViewModel;
 
@@ -17,26 +19,23 @@ import static org.mockito.Mockito.when;
 
 public class ProductPresenterTest {
 
-  private ProductViewModel productViewModel;
-
   @Test
   public void shouldRenderDataOnView(){
     final ProductView productView = mock(ProductView.class);
 
-    final StringResolver stringResolver = mock(StringResolver.class);
-    when(stringResolver.getString(R.string.cost)).thenReturn("Rs. ");
-    when(stringResolver.getString(R.string.percentage_sign)).thenReturn("%");
+    final ImagePresenter imagePresenter = mock(ImagePresenter.class);
+    final Resources resources = mock(Resources.class);
+    when(resources.getString(R.string.cost)).thenReturn("Rs. ");
+    when(resources.getString(R.string.percentage_sign)).thenReturn("%");
 
     Product product = new ProductBuilder()
         .withTitle("watch")
         .withPrice(25)
         .withUpcomingDeal(50).build();
 
-    productViewModel = new ProductViewModel(product);
+    final ProductPresenter productPresenter = new ProductPresenter(productView, product, imagePresenter, resources);
 
-    final ProductPresenter productPresenter = new ProductPresenter(productView, stringResolver);
-
-    productPresenter.renderViewFor(productViewModel);
+    productPresenter.renderView();
 
     verify(productView).renderProductTitle("watch");
     verify(productView).renderProductCost("Rs. 25");

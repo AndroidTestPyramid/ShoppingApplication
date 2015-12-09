@@ -1,7 +1,5 @@
 package droidcon.login.service;
 
-import android.os.Environment;
-
 import droidcon.service.APIClient;
 import droidcon.service.ResponseCallback;
 
