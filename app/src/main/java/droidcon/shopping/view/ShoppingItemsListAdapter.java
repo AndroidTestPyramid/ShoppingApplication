@@ -21,6 +21,7 @@ import droidcon.service.ResponseCallback;
 import droidcon.service.ResponseDeserializerFactory;
 import droidcon.shopping.model.Product;
 import droidcon.shopping.util.ImageCache;
+import droidcon.shopping.viewmodel.ProductViewModel;
 
 public class ShoppingItemsListAdapter extends BaseAdapter {
   public List<Product> products = new ArrayList<>();
@@ -50,49 +51,36 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_layout, parent, false);
     }
+
     Product product = products.get(position);
-    renderProductTitle(convertView, product);
+
+    final ProductViewModel productViewModel = new ProductViewModel(product, convertView.getResources());
+    renderProductTitle(convertView, productViewModel);
     renderProductImage(convertView, product);
-    renderProductCost(convertView, product);
-    renderProductUpcomingDeal(convertView, product);
-    renderProductPopularityStatus(convertView, product);
+    renderProductCost(convertView, productViewModel);
+    renderProductUpcomingDeal(convertView, productViewModel);
+    renderProductPopularityStatus(convertView, productViewModel);
     return convertView;
   }
 
-  private void renderProductPopularityStatus(View convertView, Product product) {
-    String popularity = null;
-    int textColor = 0;
-    Context context = convertView.getContext();
+  private void renderProductPopularityStatus(View convertView, ProductViewModel productViewModel) {
     TextView popularityView = (TextView) convertView.findViewById(R.id.popularity);
-    if(product.isNew()){
-      popularity = context.getString(R.string.product_new);
-      textColor = R.color.red;
-    }
-    if(product.isPopular()){
-      popularity = context.getString(R.string.popular);
-      textColor = R.color.purple;
-    }
-    if(popularity != null) {
-      popularityView.setText(popularity);
-      popularityView.setTextColor(context.getResources().getColor(textColor));
-      popularityView.setVisibility(View.VISIBLE);
-    }else{
-      popularityView.setVisibility(View.GONE);
-    }
+    popularityView.setText(productViewModel.getPopularityLabel());
+    popularityView.setTextColor(convertView.getResources().getColor(productViewModel.getPopularityTextColor()));
+    popularityView.setVisibility(productViewModel.getPopularityVisibilityStatus());
   }
 
-  private void renderProductUpcomingDeal(View convertView, Product product) {
-    if(product.anyUpcomingDeal()){
-      final LinearLayout upcomingDealView = (LinearLayout)convertView.findViewById(R.id.upcoming_deal);
-      upcomingDealView.setVisibility(View.VISIBLE);
-      TextView percentage = (TextView) convertView.findViewById(R.id.percentage);
-      percentage.setText(String.format("%d%s", product.getUpcomingDeal(), convertView.getContext().getString(R.string.percentage_sign)));
-    }
+  private void renderProductUpcomingDeal(View convertView, ProductViewModel productViewModel) {
+    final LinearLayout upcomingDealView = (LinearLayout) convertView.findViewById(R.id.upcoming_deal);
+    upcomingDealView.setVisibility(productViewModel.getUpcomingDealVisibilityStatus());
+
+    TextView percentage = (TextView) convertView.findViewById(R.id.percentage);
+    percentage.setText(productViewModel.getUpcomingDeal());
   }
 
-  private void renderProductTitle(View convertView, Product product) {
+  private void renderProductTitle(View convertView, ProductViewModel productViewModel) {
     TextView titleTextView = (TextView) convertView.findViewById(R.id.title);
-    titleTextView.setText(product.getTitle());
+    titleTextView.setText(productViewModel.getTitle());
   }
 
   private void renderProductImage(View convertView, Product product) {
@@ -100,9 +88,9 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
     fetchBitmap(product.getImageUrl(), imageView);
   }
 
-  private void renderProductCost(View convertView, Product product) {
+  private void renderProductCost(View convertView, ProductViewModel productViewModel) {
     TextView costTextView = (TextView) convertView.findViewById(R.id.cost);
-    costTextView.setText(String.format("%s%d", convertView.getContext().getString(R.string.cost), product.getPrice()));
+    costTextView.setText(productViewModel.getPrice());
   }
 
   private void fetchBitmap(String imageUrl, ImageView imageView) {
@@ -130,7 +118,6 @@ public class ShoppingItemsListAdapter extends BaseAdapter {
 
       @Override
       public void onError(Exception exception) {
-
       }
     };
   }
