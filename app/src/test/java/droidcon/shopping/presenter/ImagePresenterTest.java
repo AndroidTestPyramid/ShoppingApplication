@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.InputStream;
 
 import droidcon.service.ResponseCallback;
+import droidcon.shopping.repository.ImageRepository;
 import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.view.ProductView;
 
@@ -29,6 +30,7 @@ public class ImagePresenterTest {
   private Bitmap bitmap;
   private ProductView productView;
   private ImageView imageView;
+  private ImageRepository imageRepository;
 
   @Before
   public void setup(){
@@ -36,6 +38,7 @@ public class ImagePresenterTest {
     bitmap = mock(Bitmap.class);
     productView = mock(ProductView.class);
     imageView = mock(ImageView.class);
+    imageRepository = mock(ImageRepository.class);
   }
 
   @Test
@@ -49,9 +52,10 @@ public class ImagePresenterTest {
       }
     }).when(imageFetcher).execute(eq(""), Matchers.<ResponseCallback<Bitmap>>any());
 
-    ImagePresenter productDetailsPresenter = new ImagePresenter(productView, imageFetcher);
+    ImagePresenter productDetailsPresenter = new ImagePresenter(productView, imageFetcher, imageRepository);
     productDetailsPresenter.fetchImageFor(imageView, "");
 
+    verify(imageRepository).save("", bitmap);
     verify(productView).renderImage(imageView, bitmap);
   }
 
@@ -71,9 +75,10 @@ public class ImagePresenterTest {
       }
     }).when(imageFetcher).execute(eq(""), Matchers.<ResponseCallback<Bitmap>>any());
 
-    ImagePresenter productDetailsPresenter = new ImagePresenter(productView, imageFetcher);
+    ImagePresenter productDetailsPresenter = new ImagePresenter(productView, imageFetcher, imageRepository);
     productDetailsPresenter.fetchImageFor(imageView, "");
 
+    verify(productView).renderImage(imageView, bitmap[0]);
     verify(productView).renderImage(imageView, bitmap[0]);
   }
 }

@@ -16,6 +16,7 @@ import droidcon.service.APIClient;
 import droidcon.shopping.presenter.ImagePresenter;
 import droidcon.shopping.presenter.ProductDetailsPresenter;
 import droidcon.shopping.presenter.ProductPresenter;
+import droidcon.shopping.repository.ImageRepository;
 import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.viewmodel.ProductViewModel;
@@ -36,7 +37,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
     product = getIntent().getExtras().getParcelable(PRODUCT_KEY);
     final StringResolver stringResolver = new StringResolver(this);
 
-    ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()));
+    ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()), new ImageRepository(this));
     imagePresenter.fetchImageFor((ImageView) findViewById(R.id.product_image), product.getImageUrl());
 
     ProductPresenter productPresenter = new ProductPresenter(this, stringResolver);

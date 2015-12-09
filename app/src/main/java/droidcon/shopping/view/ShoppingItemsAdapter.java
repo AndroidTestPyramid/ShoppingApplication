@@ -17,6 +17,7 @@ import droidcon.cart.R;
 import droidcon.service.APIClient;
 import droidcon.shopping.presenter.ImagePresenter;
 import droidcon.shopping.presenter.ProductPresenter;
+import droidcon.shopping.repository.ImageRepository;
 import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.util.StringResolver;
 import droidcon.shopping.viewmodel.ProductViewModel;
@@ -65,7 +66,7 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
 
     productPresenter.renderViewFor(product);
 
-    ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()));
+    ImagePresenter imagePresenter = new ImagePresenter(this, new ImageFetcher(new APIClient()), new ImageRepository(context));
     imagePresenter.fetchImageFor((ImageView)convertView.findViewById(R.id.imageView), product.getImageUrl());
     return convertView;
   }
