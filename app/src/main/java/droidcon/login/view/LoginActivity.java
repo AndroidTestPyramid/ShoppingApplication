@@ -30,16 +30,6 @@ public class LoginActivity extends Activity implements LoginView {
 
     emailView = (EditText) findViewById(R.id.email);
     passwordView = (EditText) findViewById(R.id.password);
-    passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-      @Override
-      public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-        if (id == R.id.login || id == EditorInfo.IME_NULL) {
-          login(findViewById(R.id.sign_in_button));
-          return true;
-        }
-        return false;
-      }
-    });
   }
 
   public void login(View signInButtonView) {
