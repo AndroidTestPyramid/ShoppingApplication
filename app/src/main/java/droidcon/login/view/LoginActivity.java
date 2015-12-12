@@ -6,11 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
@@ -36,16 +33,6 @@ public class LoginActivity extends Activity {
 
     emailView = (EditText) findViewById(R.id.email);
     passwordView = (EditText) findViewById(R.id.password);
-    passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-      @Override
-      public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-        if (id == R.id.login || id == EditorInfo.IME_NULL) {
-          login(findViewById(R.id.sign_in_button));
-          return true;
-        }
-        return false;
-      }
-    });
   }
 
   public void login(View signInButtonView) {
