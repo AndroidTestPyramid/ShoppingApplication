@@ -18,8 +18,7 @@ public class MockHTTPDispatcher extends Dispatcher {
 
   public MockHTTPDispatcher mock(MockRequest mockRequest) {
     MockResponse mockResponse = new MockResponse();
-    if(mockRequest.response != null)
-      mockResponse.setBody(mockRequest.response);
+    mockResponse.setBody(mockRequest.response);
     requestResponseMap.put(mockRequest, mockResponse);
     return this;
   }
@@ -28,7 +27,8 @@ public class MockHTTPDispatcher extends Dispatcher {
   public MockResponse dispatch(RecordedRequest recordedRequest) {
     synchronized (this) {
       for (MockRequest mockRequest : requestResponseMap.keySet()) {
-        return requestResponseMap.get(mockRequest);
+        if (mockRequest.path.contains(recordedRequest.getPath()))
+          return requestResponseMap.get(mockRequest);
       }
       return new MockResponse().setResponseCode(404);
     }

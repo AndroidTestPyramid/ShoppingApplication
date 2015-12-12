@@ -1,11 +1,13 @@
 package droidcon.mockhttp;
 
+import okio.Buffer;
+
 public class MockRequest {
   String path;
   String httpMethod;
-  String response;
+  Buffer response;
 
-  public MockRequest(String path, String httpMethod, String response) {
+  public MockRequest(String path, String httpMethod, Buffer response) {
     this.path = path;
     this.httpMethod = httpMethod;
     this.response = response;

@@ -14,6 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import droidcon.cart.R;
 import droidcon.login.view.LoginActivity;
 import droidcon.rule.MockWebServerRule;
@@ -89,7 +91,7 @@ public class LoginActivityTest {
   }
 
   @Test
-  public void shouldNavigateToShoppingActivityOnValidCredential() {
+  public void shouldNavigateToShoppingActivityOnValidCredential() throws IOException {
     String email = "v@v.com";
     String password = "12345";
     onView(withId(R.id.email)).perform(ViewActions.typeText(email));

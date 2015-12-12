@@ -6,9 +6,15 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+
 import droidcon.login.service.EnvironmentManager;
 import droidcon.mockhttp.MockHTTPDispatcher;
 import droidcon.mockhttp.MockRequest;
+import okio.Buffer;
 
 
 public class MockWebServerRule implements TestRule {
@@ -27,8 +33,12 @@ public class MockWebServerRule implements TestRule {
     return new MockHTTPServerStatement(statement);
   }
 
-  public MockRequest mockResponse(String path, String httpMethod, String response) {
-    MockRequest mockRequest = new MockRequest(domain().concat(path), httpMethod, response);
+  public MockRequest mockResponse(String path, String httpMethod, String response) throws IOException {
+    return mockResponse(path, httpMethod, new ByteArrayInputStream(response.getBytes()));
+  }
+
+  public MockRequest mockResponse(String path, String httpMethod, InputStream response) throws IOException {
+    MockRequest mockRequest = new MockRequest(domain().concat(path), httpMethod, new Buffer().readFrom(response));
     mockHTTPDispatcher.mock(mockRequest);
     return mockRequest;
   }
