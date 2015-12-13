@@ -10,11 +10,13 @@ import droidcon.shopping.viewmodel.ProductViewModel;
 public class ProductPresenter {
 
   private final ProductView productView;
+  private final Product product;
   private final ProductViewModel productViewModel;
   private final ImagePresenter imagePresenter;
 
   public ProductPresenter(ProductView productView, Product product, ImagePresenter imagePresenter, Resources resources) {
     this.productView = productView;
+    this.product = product;
     this.productViewModel = new ProductViewModel(product, resources);
     this.imagePresenter = imagePresenter;
   }
@@ -27,6 +29,6 @@ public class ProductPresenter {
   }
 
   public void renderImageFor(ImageView imageView) {
-    imagePresenter.fetchImageFor(imageView, productViewModel.getImageUrl());
+    imagePresenter.fetchImageFor(imageView, product.getImageUrl());
   }
 }

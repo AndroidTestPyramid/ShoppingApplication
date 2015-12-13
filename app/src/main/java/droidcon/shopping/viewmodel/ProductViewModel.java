@@ -19,10 +19,6 @@ public class ProductViewModel {
     return product.getTitle();
   }
 
-  public String getImageUrl() {
-    return product.getImageUrl();
-  }
-
   public String getPrice() {
     return String.format("%s%d", resources.getString(R.string.cost), product.getPrice());
   }
@@ -55,10 +51,6 @@ public class ProductViewModel {
       return View.VISIBLE;
     }
     return View.GONE;
-  }
-
-  public int getProductId() {
-    return product.getProductId();
   }
 
   public String getDescription() {
