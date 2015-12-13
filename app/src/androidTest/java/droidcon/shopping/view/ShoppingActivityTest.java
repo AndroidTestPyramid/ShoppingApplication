@@ -58,7 +58,6 @@ public class ShoppingActivityTest {
     mockWebServerRule.mockResponse("/sample_images/droidcon_electronics.json", APIClient.RequestType.GET.name(), electronics);
     mockWebServerRule.mockResponse("/sample_images/droidcon_accessories.json", APIClient.RequestType.GET.name(), accessories);
     mockWebServerRule.mockResponse("/sample_images/nexus_5_case11.jpg", APIClient.RequestType.GET.name(), readInputStreamFrom("ic_launcher.png", getContext()));
-
   }
 
   @Test

@@ -6,8 +6,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class ProductDetailsActivityTest {
     activityTestRule.launchActivity(intent);
   }
 
-  @Ignore
+  @Test
   public void shouldShowDetailsOfTheProduct() throws IOException {
     onView(withId(R.id.product_title)).check(matches(withText("ProductTitle")));
     onView(withId(R.id.product_description)).check(matches(withText("ProductDesc")));
@@ -66,7 +66,7 @@ public class ProductDetailsActivityTest {
     onView(withId(R.id.popularity)).check(matches(withText("Popular")));
   }
 
-  @Ignore
+  @Test
   public void shouldScrollAndAddItemToCart() throws IOException {
     assertEquals(0, ProductInCart.count(ProductInCart.class, null, null));
 
