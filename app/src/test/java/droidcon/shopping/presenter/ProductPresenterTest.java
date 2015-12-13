@@ -8,10 +8,7 @@ import org.junit.Test;
 import droidcon.cart.R;
 import droidcon.shopping.builder.ProductBuilder;
 import droidcon.shopping.model.Product;
-import droidcon.shopping.repository.ImageRepository;
-import droidcon.shopping.service.ImageFetcher;
 import droidcon.shopping.view.ProductView;
-import droidcon.shopping.viewmodel.ProductViewModel;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -40,6 +37,6 @@ public class ProductPresenterTest {
     verify(productView).renderProductTitle("watch");
     verify(productView).renderProductCost("Rs. 25");
     verify(productView).renderProductUpcomingDeal(View.VISIBLE, "50%");
-    verify(productView).renderProductPopularityStatus("", R.color.white, View.GONE);
+    verify(productView).renderProductLabel("", R.color.white, View.GONE);
   }
 }

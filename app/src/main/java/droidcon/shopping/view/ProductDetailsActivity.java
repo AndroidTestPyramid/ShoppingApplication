@@ -61,11 +61,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements Product
   }
 
   @Override
-  public void renderProductPopularityStatus(String popularityLabel, int popularityTextColor, int popularityVisibilityStatus) {
-    final TextView popularityLabelTextView = (TextView) findViewById(R.id.popularity);
-    popularityLabelTextView.setText(popularityLabel);
-    popularityLabelTextView.setTextColor(getResources().getColor(popularityTextColor));
-    popularityLabelTextView.setVisibility(popularityVisibilityStatus);
+  public void renderProductLabel(String popularityLabel, int popularityTextColor, int popularityVisibilityStatus) {
+    final TextView labelTextView = (TextView) findViewById(R.id.popularity);
+    labelTextView.setText(popularityLabel);
+    labelTextView.setTextColor(getResources().getColor(popularityTextColor));
+    labelTextView.setVisibility(popularityVisibilityStatus);
   }
 
   @Override

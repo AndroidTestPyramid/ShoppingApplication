@@ -75,11 +75,11 @@ public class ShoppingItemsAdapter extends BaseAdapter implements ProductView {
   }
 
   @Override
-  public void renderProductPopularityStatus(String popularityLabel, int popularityTextColor, int popularityVisibilityStatus) {
-    final TextView popularityLabelTextView = viewHolder.popularityLabelTextView;
-    popularityLabelTextView.setText(popularityLabel);
-    popularityLabelTextView.setTextColor(context.getResources().getColor(popularityTextColor));
-    popularityLabelTextView.setVisibility(popularityVisibilityStatus);
+  public void renderProductLabel(String popularityLabel, int popularityTextColor, int popularityVisibilityStatus) {
+    final TextView labelTextView = viewHolder.popularityLabelTextView;
+    labelTextView.setText(popularityLabel);
+    labelTextView.setTextColor(context.getResources().getColor(popularityTextColor));
+    labelTextView.setVisibility(popularityVisibilityStatus);
   }
 
   @Override
