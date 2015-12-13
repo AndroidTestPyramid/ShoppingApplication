@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import okio.Buffer;
-
 public class TestUtilities {
 
   public static String readFrom(String assetFileName, Context context) throws IOException {
@@ -23,9 +21,6 @@ public class TestUtilities {
   }
 
   public static InputStream readInputStreamFrom(String assetFileName, Context context) throws IOException {
-    InputStream inputStream = context.getAssets().open(assetFileName);
-
-    return inputStream;
+    return context.getAssets().open(assetFileName);
   }
-
 }

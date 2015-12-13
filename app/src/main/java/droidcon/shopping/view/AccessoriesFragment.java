@@ -10,7 +10,6 @@ import droidcon.cart.R;
 import droidcon.service.APIClient;
 import droidcon.shopping.presenter.ProductListPresenter;
 import droidcon.shopping.service.AccessoriesFetcher;
-import droidcon.shopping.util.StringResolver;
 
 public class AccessoriesFragment extends ProductsBaseFragment implements ProductListView {
 
@@ -18,7 +17,7 @@ public class AccessoriesFragment extends ProductsBaseFragment implements Product
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = super.onCreateView(inflater, container, savedInstanceState);
-    view.setTag(getString(R.string.accessories));
+    view.setContentDescription(getString(R.string.accessories));
     return view;
   }
 
